@@ -14,7 +14,8 @@ export const INITIAL_STATE = fromJS({
     data: ''
   }
 })
-const API_HOST = process.env.API_HOST || '/test-data/'
+const API_HOST = process.env.API_HOST || window.location.origin + window.location.pathname + '/test-data/'
+
 
 /*********************************************************************
 ||  The reducer

@@ -1,0 +1,34 @@
+$white: #fff;
+$black: #000;
+
+// Transparent Colors
+$white-75: rgba(255,255,255,.75);
+
+$darkest-gray: darken($white, 90);
+$darker-gray: darken($white, 70);
+$dark-gray: darken($white, 55);
+$medium-gray: darken($white, 36);
+$light-gray: darken($white, 21);
+$lighter-gray: darken($white, 08);
+$lightest-gray: darken($white, 04);
+
+$color-background-dark: darken($white, 80);
+$color-background: $white;
+$color-background-light: darken($white, 10);
+$color-background-lighter: darken($white, 04);
+
+$color-text-dark: darken($white, 85);
+$color-text: darken($white, 75);
+$color-text-light: darken($white, 60);
+$color-text-lighter: darken($white, 40);
+$color-text-white: $white;
+
+$color-border-dark: darken($white, 80);
+$color-border: darken($white, 55);
+$color-border-light: darken($white, 25);
+$color-border-lighter: darken($white, 7);
+
+// Style Colors
+$oreilly-gray: #363838;
+$oreilly-red: #b9002d;
+$oreilly-red-dark: darken($oreilly-red, 13);

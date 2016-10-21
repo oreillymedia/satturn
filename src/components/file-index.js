@@ -1,6 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import TreeView from 'react-treeview'
+import classnames from 'classnames'
 
 import {getFile}  from '../state/files'
 
@@ -33,7 +34,8 @@ export class Folder extends React.Component {
           : <File key={child.path} {...child} />
           )
       })
-    return ( <TreeView nodeLabel={this.props.name} defaultCollapsed={true} > 
+    let classes = classnames( 'st-folder')
+    return ( <TreeView nodeLabel={this.props.name} className={classes} defaultCollapsed={true} > 
       { children }
       </TreeView>
     );
@@ -46,7 +48,10 @@ export const File = connect((state) => state)( class File extends React.Componen
     this.props.dispatch(getFile(path))
   }
   render() {
-    return ( <div className="file" onClick={() => this.selectFile(this.props.path) }> {this.props.name} </div> );
+    let classes = classnames( 'st-file', {
+      "st-file-selected" : (this.props.path == this.props.Files.getIn(['current', 'path']))
+    })
+    return ( <div className={classes} onClick={() => this.selectFile(this.props.path) }> {this.props.name} </div> );
   }
 })
 

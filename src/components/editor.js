@@ -8,13 +8,15 @@ import JsonEditor from './json-editor'
 export default connect((state) => state)( class Editor extends React.Component {
   
   render() {
-    let extension = this.props.file.get('path').split('.').pop()
-    let editor = ()=> {
-        switch(extension){
-          case 'md':
-            return (<MarkdownEditor key={this.props.file.get('path')} initialMdContent={this.props.file.get('data')}/>)
-          case 'html':
-            return (<MarkdownEditor key={this.props.file.get('path')} initialHtmlContent={this.props.file.get('data')}/>)
+    let file = this.props.file.get('path').split('/').pop()
+    let chooseEditor = ()=> {
+        switch(true){
+          case /.md$/.test(file):
+            return (<DraftEditor key={this.props.file.get('path')} initialMdContent={this.props.file.get('data')}/>)
+          case /.html$/.test(file):
+            return (<DraftEditor key={this.props.file.get('path')} initialHtmlContent={this.props.file.get('data')}/>)
+          default:
+            return (<SimpleEditor key={this.props.file.get('path')} initialHtmlContent={this.props.file.get('data')}/>)
         }
         return 'no editor for this file :('
     }
@@ -22,7 +24,7 @@ export default connect((state) => state)( class Editor extends React.Component {
       <div className="st-editor">
         <h1>{this.props.file.get('path')}</h1>
         <h2>{extension}</h2>
-        {editor()}
+        {chooseEditor()}
       </div>
     )
   }

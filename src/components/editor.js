@@ -20,6 +20,8 @@ export default connect((state) => state)( class Editor extends React.Component {
     let dotfile = /^\./.test(file)
     let chooseEditor = ()=> {
         switch(true){
+          case /.(jpe?g|png|psd|tift?|gif|svg)$/.test(file):
+            return (<div> Not opening images :)</div>)
           case /.(md|html)$/.test(file):
             return (<DraftEditor key={this.props.file.get('path')} 
                       content={this.props.file.get('data')}
@@ -34,10 +36,12 @@ export default connect((state) => state)( class Editor extends React.Component {
                       content={this.props.file.get('data')}
                       onChange={ (data)=> this.onChange(data)}
                       />)
+          
           case file.length > 0:
+            var mono = !extension || dotfile || (['sh', 'js', 'css', 'scss', 'conf'].indexOf(extension) > -1);
             return (<SimpleEditor 
                       key={this.props.file.get('path')} 
-                      monospaced={!extension || dotfile}
+                      monospaced={mono}
                       content={this.props.file.get('data')} 
                       onChange={ (data)=> this.onChange(data)}
                       />)

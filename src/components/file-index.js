@@ -51,10 +51,17 @@ export const File = connect((state) => state)( class File extends React.Componen
     this.props.dispatch(getFile(path))
   }
   render() {
+    let isProcessingThisFile = this.props.Files.getIn(['processing', 'status']) && this.props.path == this.props.Files.getIn(['processing', 'path'])
     let classes = classnames( 'st-file', {
-      "st-file-selected" : (this.props.path == this.props.Files.getIn(['current', 'path']))
+      "st-file-selected" : (this.props.path == this.props.Files.getIn(['current', 'path'])),
+      "st-file-loading" :  isProcessingThisFile
     })
-    return ( <div className={classes} onClick={() => this.selectFile(this.props.path) }> {this.props.name} </div> );
+    return ( <div className={classes} onClick={() => this.selectFile(this.props.path) }> 
+      {this.props.name} 
+      <span className="icon-wrapper"> 
+        { isProcessingThisFile ? <i className="material-icons icon-spinning">autorenew</i> : null}
+      </span>
+      </div> );
   }
 })
 

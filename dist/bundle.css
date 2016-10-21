@@ -13,7 +13,6 @@ body {
 .material-icons.material-icons {
   font-size: 1em;
   line-height: inherit;
-  float: left;
   margin-top: .075em; }
 
 header {
@@ -92,6 +91,8 @@ footer {
 .st-project-name {
   font-weight: normal;
   font-size: 1.4rem; }
+  .st-project-name .material-icons {
+    float: left; }
 
 .st-file, .st-folder {
   padding: .3em; }
@@ -100,6 +101,8 @@ footer {
   margin-left: -20em;
   padding-left: 20em;
   cursor: default; }
+  .st-file .material-icons {
+    float: right; }
 
 .st-file-selected {
   background: #e6e6e6; }

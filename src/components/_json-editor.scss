@@ -10,7 +10,7 @@
   padding: .3em 0;
 }
 .jsonName {
-  min-width: 100px;
+  min-width: 150px;
   text-align: left;
 }
 
@@ -19,6 +19,8 @@
     border: none;
     font-size: inherit;
     font-family: inherit;
-
+    outline: none;
+    padding: 0;
+    margin: 0;
   }
 }

@@ -3,8 +3,8 @@ import Json from 'react-json'
 
 
 var settings = {
-  form: true,
-  fields: { password: {type: 'password'} }
+  // form: true,
+  // fields: { password: {type: 'password'} }
 };
 
 export default class JsonEditor extends React.Component {

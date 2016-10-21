@@ -34,6 +34,7 @@
     "draft-js-import-html": "^0.3.0",
     "draft-js-import-markdown": "^0.2.0",
     "react": "^15.3.2",
+    "react-autosize-textarea": "^0.3.3",
     "react-dom": "^15.3.2",
     "react-json": "^0.2.1",
     "react-redux": "^4.4.5",

@@ -21,12 +21,13 @@ const API_HOST = process.env.API_HOST || '/test-data/'
 *********************************************************************/
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case "saveFile":
-      return state.setIn(action.path, action.data)
     case "setTree" :
       return state.set('tree', action.tree)
     case "setCurrentFile" :
       return state.set('current', fromJS({'data': action.data, path: action.path}) )
+    case "saveCurrent":
+      return state.setIn(['current', 'data'], action.data)
+    
   }
   return state;
 }
@@ -34,19 +35,23 @@ export default function(state = INITIAL_STATE, action) {
 /*********************************************************************
 ||  Actions
 *********************************************************************/
-export function saveFile(path, data) {
-  return (dispatch, getState) => {
-    dispatch({type: "saveFile", path: path, data: data})
-  }
-}
+
 export function setTree(tree) {
   return (dispatch, getState) => {
-    dispatch({type: "setTree", tree: tree})
+    return dispatch({type: "setTree", tree: tree})
   }
 }
 export function setCurrentFile(path, data) {
   return (dispatch, getState) => {
     return dispatch({type: "setCurrentFile", path: path, data: data})
+  }
+}
+
+// this is currently only saving to the state tree. 
+// we would make this function async to send a call to an actual api
+export function saveCurrentFile(data) {
+  return (dispatch, getState) => {
+    return dispatch({type: "saveCurrent", data: data})
   }
 }
 

@@ -18,7 +18,7 @@ const main = React.createClass({
         </header>
         <main>
           <FileIndex {...this.props} />
-          <Editor file={this.props.Files.get('current')} />
+          <Editor file={this.props.Files.get('current')} {...this.props} />
         </main>
         <footer>
           (c) 2016 Satturn File Editor

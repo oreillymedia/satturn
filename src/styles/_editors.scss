@@ -1,0 +1,14 @@
+@import '../components/draft-editor';
+
+.st-simple-editor {
+  font-family: inherit;
+  font-size: inherit;
+  height: 100%;
+  width: 100%;
+  border:none;
+  outline: none;
+  resize: none;
+}
+.st-simple-editor-monospaced {
+  font-family: $monospaced;
+}

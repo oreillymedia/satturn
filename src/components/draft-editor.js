@@ -10,13 +10,15 @@ export default class DraftEditor extends React.Component {
   constructor(props) {
     super(props);
     let content = {}
-    if (props.initialMdContent) { content = stateFromMarkdown(props.initialMdContent) }
-    if (props.initialHtmlContent) { content = stateFromHTML(props.initialHtmlContent) }
+    if (props.type == 'md') { content = stateFromMarkdown(props.content) }
+    if (props.type == 'html') { content = stateFromHTML(props.content) }
 
     this.state = {editorState: EditorState.createWithContent(content)};
     
     this.onChange = (editorState) => {
-      this.setState({editorState}); 
+      this.setState({editorState});
+      if (props.type == 'md') { props.onChange(stateToMarkdown(editorState.getCurrentContent())) }
+      if (props.type == 'html') { props.onChange(stateToHTML(editorState.getCurrentContent())) }
     }
     
     this.focus = () => this.refs.editor.focus();

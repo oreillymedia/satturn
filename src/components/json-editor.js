@@ -9,11 +9,14 @@ var settings = {
 
 export default class JsonEditor extends React.Component {
   onChange(value) {
-    console.log(value)
+    this.props.onChange(JSON.stringify(value))
   }
   render() {
     return (
-      <Json value={props.initialContent} onChange={this.onChange}/>
+      <Json 
+        value={JSON.parse(this.props.content)} 
+        settings={ settings }
+        onChange={ (v)=> this.onChange(v)}/>
     );
   }
 }

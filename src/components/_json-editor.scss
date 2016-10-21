@@ -1,0 +1,24 @@
+@import '../../node_modules/react-json/react-json';
+// @import '../../node_modules/react-json/react-json-block';
+
+// JSON EDITOR
+
+.jsonEditor {
+  font-family: $monospaced;  
+}
+.jsonField {
+  padding: .3em 0;
+}
+.jsonName {
+  min-width: 100px;
+  text-align: left;
+}
+
+.jsonValue {
+  input {
+    border: none;
+    font-size: inherit;
+    font-family: inherit;
+
+  }
+}

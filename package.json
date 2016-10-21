@@ -4,10 +4,10 @@
   "description": "A file editor with support for markdown and json",
   "main": "index.js",
   "scripts": {
-    "develop": "npm run watchify & python -m SimpleHTTPServer 3003",
+    "develop": "npm run watch & python -m SimpleHTTPServer 3003",
     "watch": "npm run scss:watch & npm run watchify",
     "watchify": "watchify -o dist/bundle.js src/index.js -dv",
-    "scss": "node-sass src/styles/app.scss -o dist/assets",
+    "scss": "node-sass src/bundle.scss -o dist/",
     "scss:watch": "npm run scss & npm run scss -- -rw src/styles/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -27,9 +27,20 @@
   },
   "homepage": "https://github.com/bravomartin/satturn-file-editor#readme",
   "dependencies": {
+    "classnames": "^2.2.5",
     "draft-js": "^0.9.1",
+    "draft-js-export-html": "^0.5.0",
+    "draft-js-export-markdown": "^0.2.1",
+    "draft-js-import-html": "^0.3.0",
+    "draft-js-import-markdown": "^0.2.0",
     "react": "^15.3.2",
-    "react-dom": "^15.3.2"
+    "react-dom": "^15.3.2",
+    "react-json": "^0.2.1",
+    "react-redux": "^4.4.5",
+    "react-router": "^2.8.1",
+    "react-treeview": "^0.4.5",
+    "redux": "^3.6.0",
+    "redux-thunk": "^2.1.0"
   },
   "browserify": {
     "transform": [
@@ -49,6 +60,7 @@
     "babel-preset-react": "^6.16.0",
     "babelify": "^7.3.0",
     "browserify": "^13.1.0",
+    "dir-to-json": "0.0.3",
     "local-web-server": "^1.2.6",
     "node-sass": "^3.10.1",
     "reactify": "^1.1.1",

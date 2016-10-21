@@ -14,17 +14,9 @@ import NotFound from './components/not-found'
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
 const store = createStoreWithMiddleware(reducer);
 
-
-const routes = (
-  <Route component={AppLayout}>
-    <Route name="welcome" path="/" component={Welcome}  />
-    <Route path="*" component={NotFound} />
-  </Route>
-)
-
 ReactDOM.render(
   <Provider store={store}>
-    <Router history={hashHistory}>{routes}</Router>
+    <AppLayout/>
   </Provider>,
   document.getElementById('container')
 );

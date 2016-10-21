@@ -1,6 +1,10 @@
+$header-height: 48px;
+$index-width: 250px;
+
+
 html {
   font-family: Helvetica, Arial, Sans-Serif;
-  font-size: 16px;
+  font-size: 14px;
 
   box-sizing: border-box;
 }
@@ -9,30 +13,47 @@ html {
 }
 body {
   margin: 0;
-  
+ }
+
+.material-icons.material-icons {
+  font-size: 1em;
+  line-height: inherit;
+  float: left;
+  margin-top: .075em;
 }
 header {
+  position: relative;
+  z-index: 30;
   padding: .5em 1em;
   background-color: $oreilly-red;
   color: $white;
+  height: $header-height;
   h1 {
     margin: 0;
   }
 }
+
+
 main {
-  min-height: calc(100vh - 14em);
+  min-height: calc(100vh - #{$header-height});
 }
 
-$index-width: 200px;
 .st-file-index{
-  float: left;
+  position: fixed;
+  overflow-y: auto;
+  z-index: 20;
   width: $index-width;
   background-color: $color-background-lighter;
-  padding: 1em;
-  min-height: calc(100vh - 14em);
+  top: 0;
+  padding: calc( #{$header-height} + 1em) 0 1em 1em;
+  height: 100vh;
+
 }
 .st-editor {
   float: left;
+  position: relative;
+  z-index: 10;
+  margin-left: $index-width;
   width: calc(100% - #{$index-width});
   padding: 1em;
 }
@@ -43,4 +64,6 @@ footer {
   padding: 4em 1em;
   width: 100%;
   float: left;
+  position: relative;
+  z-index: 40;
 }

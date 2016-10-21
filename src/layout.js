@@ -20,7 +20,7 @@ const main = React.createClass({
           <FileIndex {...this.props} />
           <Editor file={this.props.Files.get('current')} {...this.props} />
         </main>
-        <footer>
+        <footer style={{display: 'none'}}>
           (c) 2016 Satturn File Editor
         </footer>
      </div>

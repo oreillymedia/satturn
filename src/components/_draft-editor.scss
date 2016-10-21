@@ -2,18 +2,29 @@
 
 
 .RichEditor-root {
-  background: #fff;
-  border: 1px solid #ddd;
-  font-family: 'Georgia', serif;
-  font-size: 14px;
-  padding: 15px;
+  // background: #fff;
+  // border: 1px solid #ddd;
+  // font-family: 'Georgia', serif;
+  // font-size: 14px;
+  // padding: 15px;
 }
 
 .RichEditor-editor {
   border-top: 1px solid #ddd;
   cursor: text;
   font-size: 16px;
+  line-height: 1.5;
   margin-top: 10px;
+}
+.RichEditor-editor pre {
+  width: initial;
+  float: initial;
+  > pre {
+    background: none;
+    border: none;
+    margin: 0;
+    padding: 0;
+  }
 }
 
 .RichEditor-editor .public-DraftEditorPlaceholder-root,

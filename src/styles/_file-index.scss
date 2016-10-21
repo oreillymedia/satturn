@@ -1,7 +1,28 @@
+@import '../../node_modules/react-treeview/react-treeview';
+
+.st-project-name {
+  font-weight: normal;
+  font-size: 1.4rem;
+}
 .st-file, .st-folder {
-  padding: .5em;
+  padding: .3em;
 } 
+.st-file {
+  margin-left: -20em;
+  padding-left: 20em;
+  cursor: default;
+}
 
 .st-file-selected {
   background: $color-background-light;
+}
+.tree-view_arrow-collapsed {
+  transform:none;
+}
+.tree-view_arrow:after {
+    font-family: 'Material Icons';
+    content: "folder_open";
+}
+.tree-view_arrow.tree-view_arrow-collapsed:after {
+  content: "folder";
 }

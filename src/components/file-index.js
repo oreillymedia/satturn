@@ -9,7 +9,7 @@ export default class FileIndex extends React.Component {
   
   render() {
     if (!this.props.Files.getIn(['tree','children'])) {
-      return (<div>Loading...</div>)
+      return (<div  className="st-file-index" >Loading...</div>)
     }
     let children = this.props.Files.getIn(['tree','children']).map( p => {
           return ( p.get('type') == 'directory' 
@@ -19,7 +19,10 @@ export default class FileIndex extends React.Component {
         })
     return (
       <div className="st-file-index">
-        <h2>{this.props.Files.getIn(['tree','name'])}</h2>
+        <h2 className="st-project-name">
+        <i className="material-icons">folder_open</i> &nbsp;
+          {this.props.Files.getIn(['tree','name'])}
+        </h2>
         {children}
       </div>
     )

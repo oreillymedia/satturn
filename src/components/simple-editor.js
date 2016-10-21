@@ -11,6 +11,7 @@ export default class SimpleEditor extends React.Component {
     })
     return (
       <Textarea
+        key={this.key + '-editor'}
         className={classes}
         value={this.props.content}
         onChange={(e)=> this.props.onChange(e.target.value)}

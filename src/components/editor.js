@@ -12,7 +12,6 @@ import SimpleEditor from './simple-editor'
 
 export default connect((state) => state)( class Editor extends React.Component {
   onChange (data) {
-    console.log(data)
     this.props.dispatch(saveCurrentFile(data))
   }
   render() {

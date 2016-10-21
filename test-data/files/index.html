@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Rebellious Magic Python</title>
+
+    <!-- Styles + O'Reilly Theme -->
+    <link rel="stylesheet" href="assets/lander.css">
+    <link rel="stylesheet" href="assets/oreilly.theme.css">
+    <!-- CodeMirror -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.6.0/codemirror.min.css" type="text/css"/>
+
+    <script src="assets/lander.js"></script>
+    <script src="assets/thebe.js"></script>
+
+    <!-- ONLY FOR THIS DEMO -->
+    <script>
+      var tempData = {
+        "icons-svg":"assets/icons.svg"
+      }
+      var analytics = analytics ||  { track: function(){}}
+      var orm = orm || {Authenticator: {currentUser: function(){return false}}}
+    </script>
+
+    <!-- THEBE AND LANDER INSTANTIATION -->
+    <script>
+    $(function() {
+      var DEBUG = false
+      // Dynamically load content before instantiating, XXX only for demo/workspace
+      // Makes it easier to swap content in and out
+      $(".article-body").load("main.html", function(){
+          var opt, pm, video_player;
+          thebe = new Thebe({
+            selector:"pre[data-executable]",
+            add_interrupt_button: true,
+            kernel_name: "python3",
+            tmpnb_mode: false,
+            url: "http://" + window.location.host,
+            debug: DEBUG,
+          });
+          window.thebe= thebe;
+
+          opt = {
+            duration: [0, 60],
+            cues: "cues.json",
+            dimensions: [854, 480],
+            debug: DEBUG,
+            cue_creator_mode: true,
+            volume: 0.4,
+            poster: "assets/poster.png",
+            show_feedback: false,
+            videojs_options: {
+              "techOrder": ["youtube"],
+              "src": "https://www.youtube.com/embed/jIHvgUAW5vE",
+            }
+          };
+
+          lander = new Lander( opt, tempData );
+          window.lander = lander;
+
+
+          // super hacky way of making the CodeMirror cells oreilly style
+          $('.CodeMirror.cm-s-default').removeClass('cm-s-default').addClass('cm-s-oreilly');
+
+          window.vp = video_player;
+
+          thebe.events.on("output_message.OutputArea", function(){
+            console.log("output");
+            lander.dom_changed()
+          });
+
+        }); // end load callback
+      }); //end domready
+      </script>
+      <style>
+      pre[data-output] {
+        display: none;
+      }
+      .code_cell {
+        max-width: 64%;
+        margin-left: 4.86111%;
+      }
+      .thebe_controls {
+        margin-top: .5em;
+        margin-bottom: 1em;
+      }
+      .thebe_controls button {
+        padding-top: .2em;
+        padding-bottom: .1em;
+      }
+      .cm-s-oreilly.CodeMirror {
+        min-height: 4rem;
+        padding-bottom: .5em;
+      }
+      </style>
+    </head>
+    <body>
+      <header id="page-header">
+        <div id="header-bar" class="t-bkg">
+          <h1 class="logo t-bkg">
+            <a href="/" class=" logo-white ">
+              <svg role="heading" aria-label="O'Reilly">
+                <title>O'Reilly</title>
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/icons.svg#oreilly-logo"></use>
+              </svg>
+            </a>
+          </h1>
+          <nav>
+            <a href="/ideas">Ideas</a>
+            <a href="/learning">Learning</a>
+            <a href="http://www.oreilly.com/conferences/">Events</a>
+            <a href="http://shop.oreilly.com/">Shop</a>
+          </nav>
+          <div id="user" class="invert">
+
+            <a href="?log-in" class="t-c--d" id="log-in">Log in</a>
+            <a href="?log-out" class="t-c--d" id="log-out">Log out</a>
+            <a href="/user/preferences" class="t-c--d" id="preferences"><span class="icon icon-configure icon--small t-fill ">
+              <svg role="img">
+                <title>configure</title>
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/icons.svg#configure"></use>
+              </svg>
+            </span></a>
+          </div>
+          <a id="menu-toggle" class="invert"><span class="icon icon-white icon-menu">
+            <svg role="img" id="close" class="is-hidden">
+              <title>Close Menu</title>
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/icons.svg#close"></use>
+            </svg>
+            <svg role="img" id="open">
+              <title>Open Menu</title>
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/icons.svg#menu"></use>
+            </svg>
+          </span></a>
+        </div>
+        <div id="mobile-menu">
+          <nav>
+            <a href="/ideas">Ideas</a>
+            <a href="/learning">Learning</a>
+            <a href="http://www.oreilly.com/conferences/">Events</a>
+            <a href="http://shop.oreilly.com/">Shop</a>
+          </nav>
+        </div>
+      </header>
+      <main>
+<article class="article">
+  <header class="article-header">
+    <h1 class="title t-c" id="main_title">
+      Your Title Goes Here
+    </h1>
+    <p class="dek"></p>
+    <div class="byline">
+      By <span class="author" itemscope="" itemtype="http://schema.org/Person">
+        <a href="#" itemprop="name">
+          Some Author
+        </a>
+      </span>
+  </div>
+  </header>
+
+  <div class="article-body"></div>
+
+</article>
+
+</main>
+</body>
+</html>

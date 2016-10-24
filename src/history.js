@@ -3,9 +3,9 @@ import {dispatch} from 'redux'
 import {getFile} from './state/files'
 
 
-const history = createHistory()
+export default history = createHistory()
 
-export default const location = history.location
+console.log(history.location)
 
 export const unlisten = history.listen((location, action) => {
   console.log(action, location.pathname, location.state)

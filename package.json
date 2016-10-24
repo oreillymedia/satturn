@@ -33,6 +33,7 @@
     "draft-js-export-markdown": "^0.2.1",
     "draft-js-import-html": "^0.3.0",
     "draft-js-import-markdown": "^0.2.0",
+    "history": "^4.3.0",
     "react": "^15.3.2",
     "react-autosize-textarea": "^0.3.3",
     "react-dom": "^15.3.2",

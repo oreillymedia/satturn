@@ -2,7 +2,8 @@
 ||  Import required modules
 *********************************************************************/
 import {fromJS, Map, findKey} from 'immutable'
-import {hashHistory} from 'react-router'
+import History from '../history'
+import {setPath, getHistoryPath, getPathFromLocation} from '../history'
 
 /*********************************************************************
 ||  Define the state tree
@@ -20,7 +21,6 @@ export const INITIAL_STATE = fromJS({
   }
 })
 const API_HOST = process.env.API_HOST || window.location.origin + (window.location.pathname + '/test-data/').replace(/\/{2,}/g, '/')
-console.log(API_HOST)
 
 
 /*********************************************************************
@@ -55,6 +55,7 @@ export function setTree(tree) {
     return dispatch({type: "setTree", tree: tree})
   }
 }
+
 export function setCurrentFile(path, data) {
   return (dispatch, getState) => {
     return dispatch({type: "setCurrentFile", path: path, data: data})
@@ -96,8 +97,28 @@ export function getTree() {
   }
 }
 
+// watch for changes in history
+export function watchHistoryChanges() {
+  return (dispatch, getState) => {
+    if (getHistoryPath().length){
+      dispatch(getFile(getHistoryPath()))  
+    }
+    History.listen((location, action) => {
+      console.log('history changed', location, action)
+      return dispatch(fetchFile(getPathFromLocation(location)))
+    })
+  }
+}
 
 export function getFile(path) {
+  setPath(path)
+  return (dispatch, getState) => {
+    dispatch(fetchFile(path))
+  }
+}
+
+
+export function fetchFile(path) {
   return (dispatch, getState) => {
     dispatch(setProcessingStatus(true, path, 'Fetching File...'))
     fetch(API_HOST + 'files/' + path, {

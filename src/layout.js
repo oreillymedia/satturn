@@ -2,12 +2,12 @@ import React from 'react';
 import {connect} from 'react-redux'
 import FileIndex from './components/file-index'
 import Editor from './components/editor'
-
-import {getTree} from './state/files'
+import {getTree, getFile, watchHistoryChanges} from './state/files'
 
 const main = React.createClass({
   componentDidMount: function() {
     this.props.dispatch(getTree())
+    this.props.dispatch(watchHistoryChanges())
   },
   render: function () {
     return (

@@ -5,7 +5,6 @@ import thunk from 'redux-thunk'
 import {Provider, connect} from 'react-redux'
 
 import reducer from './state'
-
 import AppLayout from './layout'
 
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);

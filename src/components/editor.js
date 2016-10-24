@@ -7,6 +7,7 @@ import {saveCurrentFile} from '../state/files'
 import Intro from './intro'
 
 import DraftEditor from './draft-editor'
+import MdEditor from './md-editor'
 import JsonEditor from './json-editor'
 import SimpleEditor from './simple-editor'
 
@@ -22,7 +23,12 @@ export default connect((state) => state)( class Editor extends React.Component {
         switch(true){
           case /.(jpe?g|png|psd|tift?|gif|svg)$/.test(file):
             return (<div> Not opening images :)</div>)
-          case /.(md|html)$/.test(file):
+          case /.(md)$/.test(file):
+            return (<MdEditor key={this.props.file.get('path')} 
+                      content={this.props.file.get('data')}
+                      onChange={ (data)=> this.onChange(data)}
+                      />)
+          case /.(html)$/.test(file):
             return (<DraftEditor key={this.props.file.get('path')} 
                       content={this.props.file.get('data')}
                       type={extension}

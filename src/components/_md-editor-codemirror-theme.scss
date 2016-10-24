@@ -1,0 +1,151 @@
+
+
+$orm-cm-comment   : #758186;
+$orm-cm-number    : #8F8FBB;
+$orm-cm-keyword   : #dd1144;
+$orm-cm-keyword   : hsl(350deg, 100%, 70%);
+$orm-cm-string    : #FFEE87;
+$orm-cm-string    : hsl(60deg, 100%, 70%);
+$orm-cm-def       : #fd971f;
+$orm-cm-def       : hsl(30deg, 100%, 80%);
+$orm-cm-bracket   : #f8f8f2;
+
+// .cm-s-satturn.CodeMirror{
+    
+//     pre {
+//       margin: 0 !important;
+//       max-width: initial !important;
+//     }
+// }
+
+// O'Reilly specific theme for codemirror
+// ----------------------------------------
+
+.cm-s-satturn.CodeMirror {
+  font-family: $monospaced;
+  font-size: rem(15);
+  line-height: 1.5;
+  white-space: pre-wrap;
+  padding: 0;
+  height: auto;
+}
+
+.cm-s-satturn.CodeMirror-wrap { 
+  padding-top: 0; 
+  padding-left: 0; 
+
+}
+// .cm-s-satturn.CodeMirror-focused { background: darken($color-background-dark, 5%) }
+// .cm-s-satturn div.CodeMirror-selected {background: #49483E !important;}
+// .cm-s-satturn.CodeMirror ::selection { background: rgba(73, 72, 62, .99); }
+// .cm-s-satturn.CodeMirror ::-moz-selection { background: rgba(73, 72, 62, .99); }
+
+
+.cm-s-satturn.CodeMirror{
+  pre { padding: 0 rem(4) 0 rem(15) }
+  .CodeMirror-gutters {
+    background: $color-background-dark;
+    border-right: 1px solid $darker-gray;
+    width: rem(32);
+  }
+  .CodeMirror-guttermarker { color: $black; }
+  .CodeMirror-guttermarker-subtle { color: #d0d0d0; }
+  .CodeMirror-lines { }
+  .CodeMirror-gutter-wrapper { }
+  .CodeMirror-linenumber {color: $dark-gray;  padding-top: rem(3); padding-right: rem(3); font-size: rem(12);}
+  .CodeMirror-cursor {border-left: 1px solid $black !important;}
+
+  
+  span.cm-property, span.cm-attribute {color: $black;}
+  span.cm-keyword {color: $orm-cm-keyword;}
+  span.cm-string {color: $orm-cm-string;}
+
+  span.cm-variable {color: $black;}
+  span.cm-variable-2 {color: $black;}
+  span.cm-def {color: $orm-cm-def;;}
+  span.cm-bracket {color: $orm-cm-bracket;}
+  span.cm-tag {color: #f92672;}
+  span.cm-link {color: #ae81ff;}
+  span.cm-error {background: #f92672; color: #f8f8f0;}
+
+  span.cm-comment {background-color: $color-background-light;}
+  span.cm-atom {color: #ae81ff;}
+  span.cm-number {color: $orm-cm-number;}
+
+
+  .CodeMirror-activeline-background {background: $black !important;}
+  .CodeMirror-matchingbracket {
+    text-decoration: underline;
+    color: $black !important;
+  }
+}
+
+
+// // O'Reilly specific theme for pygments
+// // ----------------------------------------
+
+
+// pre code.hll { background-color: $color-background-dark }
+// pre code.c { color: $orm-cm-comment } /* Comment */
+// pre code.err { color: #960050; background-color: #1e0010 } /* Error */
+// pre code.k { color: $orm-cm-keyword } /* Keyword */
+// pre code.l { color: #ae81ff } /* Literal */
+// pre code.n { color: white } /* Name */
+// pre code.o { color: white } /* Operator */
+// pre code.p { color: white } /* Punctuation */
+// pre code.cm { color: $orm-cm-comment } /* Comment.Multiline */
+// pre code.cp { color: $orm-cm-comment } /* Comment.Preproc */
+// pre code.c1 { color: $orm-cm-comment } /* Comment.Single */
+// pre code.cs { color: $orm-cm-comment } /* Comment.Special */
+// pre code.ge { font-style: italic } /* Generic.Emph */
+// pre code.gs { font-weight: bold } /* Generic.Strong */
+// pre code.kc { color: $orm-cm-keyword } /* Keyword.Constant */
+// pre code.kd { color: $orm-cm-keyword } /* Keyword.Declaration */
+// pre code.kn { color: $orm-cm-keyword } /* Keyword.Namespace */
+// pre code.kp { color: $orm-cm-keyword } /* Keyword.Pseudo */
+// pre code.kr { color: $orm-cm-keyword } /* Keyword.Reserved */
+// pre code.kt { color: $orm-cm-keyword } /* Keyword.Type */
+// pre code.ld { color: $orm-cm-bracket } /* Literal.Date */
+// pre code.m { color: $orm-cm-number } /* Literal.Number */
+// pre code.s { color: $orm-cm-string } /* Literal.String */
+// pre code.na { color: #a6e22e } /* Name.Attribute */
+// pre code.nb { color: white } /* Name.Builtin */
+// pre code.nc { color: #a6e22e } /* Name.Class */
+// pre code.no { color: $orm-cm-keyword } /* Name.Constant */
+// pre code.nd { color: #a6e22e } /* Name.Decorator */
+// pre code.ni { color: white } /* Name.Entity */
+// pre code.ne { color: #a6e22e } /* Name.Exception */
+// pre code.nf { color: #a6e22e } /* Name.Function */
+// pre code.nl { color: white } /* Name.Label */
+// pre code.nn { color: white } /* Name.Namespace */
+// pre code.nx { color: #a6e22e } /* Name.Other */
+// pre code.py { color: white } /* Name.Property */
+// pre code.nt { color: $orm-cm-keyword } /* Name.Tag */
+// pre code.nv { color: white } /* Name.Variable */
+// pre code.ow { color: $orm-cm-keyword } /* Operator.Word */
+// pre code.w { color: white } /* Text.Whitespace */
+// pre code.mf { color: $orm-cm-number } /* Literal.Number.Float */
+// pre code.mh { color: $orm-cm-number } /* Literal.Number.Hex */
+// pre code.mi { color: $orm-cm-number } /* Literal.Number.Integer */
+// pre code.mo { color: $orm-cm-number } /* Literal.Number.Oct */
+// pre code.sb { color: $orm-cm-bracket } /* Literal.String.Backtick */
+// pre code.sc { color: $orm-cm-bracket } /* Literal.String.Char */
+// pre code.sd { color: $orm-cm-bracket } /* Literal.String.Doc */
+// pre code.s2 { color: $orm-cm-bracket } /* Literal.String.Double */
+// pre code.se { color: $orm-cm-number } /* Literal.String.Escape */
+// pre code.sh { color: $orm-cm-bracket } /* Literal.String.Heredoc */
+// pre code.si { color: $orm-cm-bracket } /* Literal.String.Interpol */
+// pre code.sx { color: $orm-cm-bracket } /* Literal.String.Other */
+// pre code.sr { color: $orm-cm-bracket } /* Literal.String.Regex */
+// pre code.s1 { color: $orm-cm-bracket } /* Literal.String.Single */
+// pre code.ss { color: $orm-cm-bracket } /* Literal.String.Symbol */
+// pre code.bp { color: white } /* Name.Builtin.Pseudo */
+// pre code.vc { color: white } /* Name.Variable.Class */
+// pre code.vg { color: white } /* Name.Variable.Global */
+// pre code.vi { color: white } /* Name.Variable.Instance */
+// pre code.il { color: $orm-cm-number } /* Literal.Number.Integer.Long */
+
+// pre code.gh { } /* Generic Heading & Diff Header */
+// pre code.gu { color: $orm-cm-comment; } /* Generic.Subheading & Diff Unified/Comment? */
+// pre code.gd { color: $orm-cm-keyword; } /* Generic.Deleted & Diff Deleted */
+// pre code.gi { color: #a6e22e; } /* Generic.Inserted & Diff Inserted */

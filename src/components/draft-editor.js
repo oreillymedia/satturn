@@ -1,7 +1,7 @@
 import React from 'react';
 import {Editor, EditorState, RichUtils} from 'draft-js';
-import {stateToMarkdown} from 'draft-js-export-markdown';
-import {stateFromMarkdown} from 'draft-js-import-markdown';
+// import {stateToMarkdown} from 'draft-js-export-markdown';
+// import {stateFromMarkdown} from 'draft-js-import-markdown';
 import {stateToHTML} from 'draft-js-export-html';
 import {stateFromHTML} from 'draft-js-import-html';
 
@@ -10,14 +10,14 @@ export default class DraftEditor extends React.Component {
   constructor(props) {
     super(props);
     let content = {}
-    if (props.type == 'md') { content = stateFromMarkdown(props.content) }
+    // if (props.type == 'md') { content = stateFromMarkdown(props.content) }
     if (props.type == 'html') { content = stateFromHTML(props.content) }
 
     this.state = {editorState: EditorState.createWithContent(content)};
     
     this.onChange = (editorState) => {
       this.setState({editorState});
-      if (props.type == 'md') { props.onChange(stateToMarkdown(editorState.getCurrentContent())) }
+      // if (props.type == 'md') { props.onChange(stateToMarkdown(editorState.getCurrentContent())) }
       if (props.type == 'html') { props.onChange(stateToHTML(editorState.getCurrentContent())) }
     }
     

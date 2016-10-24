@@ -1,6 +1,5 @@
 import React from 'react'
 import Editor from 'react-md-editor'
-import {MarkdownEditor} from 'react-markdown-editor'
 
 
 export default class MdEditor extends React.Component {

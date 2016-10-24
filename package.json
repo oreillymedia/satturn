@@ -7,6 +7,7 @@
     "develop": "npm run watch & python -m SimpleHTTPServer 3003",
     "watch": "npm run scss:watch & npm run watchify",
     "watchify": "watchify -o dist/bundle.js src/index.js -dv",
+    "build" : "npm run scss -- --output-style compressed & browserify src/index.js | uglifyjs > dist/bundle.js",
     "scss": "node-sass src/styles/bundle.scss -o dist/",
     "scss:watch": "npm run scss & npm run scss -- -rw src/styles/",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -30,15 +31,12 @@
     "classnames": "^2.2.5",
     "draft-js": "^0.9.1",
     "draft-js-export-html": "^0.5.0",
-    "draft-js-export-markdown": "^0.2.1",
     "draft-js-import-html": "^0.3.0",
-    "draft-js-import-markdown": "^0.2.0",
     "history": "^4.3.0",
     "react": "^15.3.2",
     "react-autosize-textarea": "^0.3.3",
     "react-dom": "^15.3.2",
     "react-json": "^0.2.1",
-    "react-markdown-editor": "^0.4.0",
     "react-md-editor": "^0.2.2",
     "react-redux": "^4.4.5",
     "react-router": "^2.8.1",
@@ -68,6 +66,7 @@
     "local-web-server": "^1.2.6",
     "node-sass": "^3.10.1",
     "reactify": "^1.1.1",
+    "uglify-js": "^2.7.4",
     "watchify": "^3.7.0"
   }
 }

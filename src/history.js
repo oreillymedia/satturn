@@ -1,13 +1,15 @@
-import createHistory from 'history/createBrowserHistory' 
-import {dispatch} from 'redux'
-import {getFile} from './state/files'
+import createHistory from 'history/createHashHistory' 
+export default History = createHistory()
 
-
-export default history = createHistory()
-
-console.log(history.location)
-
-export const unlisten = history.listen((location, action) => {
-  console.log(action, location.pathname, location.state)
-  dispatch(getFile(location.pathname))
-})
+export function setPath(path){
+  // console.log(History.location.pathname)
+  if (History.location.pathname != path) {
+    History.push(path)  
+  }
+}
+export function getPathFromLocation(location){
+  return location.pathname
+}
+export function getHistoryPath(){
+  return getPathFromLocation(History.location)
+}

@@ -3,7 +3,7 @@
 *********************************************************************/
 import {fromJS, Map} from 'immutable'
 import createHistory from 'history/createHashHistory' 
-import {fetchFile} from './files'
+import {fetchFileFromServer} from './files'
 import {store} from '../'
 
 export const History = createHistory()
@@ -48,7 +48,7 @@ export function navigateTo(pathname) {
 
     // avoid duplicated fetch
     if (getState().Files.getIn(['processing', 'path']) !== newPathname) {
-      dispatch(fetchFile(newPathname))  
+      dispatch(fetchFileFromServer(newPathname))  
     }
   }
 }

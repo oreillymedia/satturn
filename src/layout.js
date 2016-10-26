@@ -13,10 +13,14 @@ const main = React.createClass({
     this.props.dispatch(watchHistoryChanges())
   },
   render: function () {
+    let isSaving = this.props.Nav.getIn(['processing', this.props.Files.getIn(['current', 'path']), 'saving'])
+    console.log('is saving on %s? %s', this.props.Files.getIn(['current', 'path']), isSaving )
+    let savingStatus = this.props.Nav.getIn(['processing', this.props.Files.getIn(['current', 'path']), 'saving']) ? "Saving..." : ""
     return (
       <div>
         <header>
           <h1>Satturn</h1>
+          <div className="st-status">{savingStatus}</div>
         </header>
         <main>
           <FileIndex {...this.props} />

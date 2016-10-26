@@ -24,16 +24,19 @@ body {
 header {
   position: relative;
   z-index: 30;
-  padding: .5em 1em;
+  padding: 0 1em;
   background-color: $oreilly-red;
   color: $white;
   height: $header-height;
+  line-height: $header-height;
   h1 {
     margin: 0;
+    float: left;
   }
-
 }
-
+.st-status {
+  float: right;
+}
 
 main {
   min-height: calc(100vh - #{$header-height});

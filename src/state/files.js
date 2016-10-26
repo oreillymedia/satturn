@@ -2,10 +2,10 @@
 ||  Import required modules
 *********************************************************************/
 import {fromJS, Map, findKey} from 'immutable'
+import throttle from 'lodash.throttle'
 import History from '../history'
 import {updatePathName} from './nav'
 import {setLoadingStatus, setSavingStatus} from './nav'
-
 
 /*********************************************************************
 ||  Define the state tree
@@ -61,6 +61,14 @@ export function setCurrentFileInvalid(path, err) {
   }
 }
 
+export function updateCurrentFile(data) {
+  return (dispatch, getState) => {
+    let currentPath = getState().Files.getIn('current','path')
+    // this should be throttled but i couldn't figure out how to make it work :/
+    dispatch(saveFileToServer(currentPath, data))
+    return dispatch({type: "saveCurrentInState", data: data})
+  }
+}
 
 /*********************************************************************
 ||  Async Actions
@@ -89,7 +97,8 @@ export function getTree() {
   }
 }
 
-export function fetchFile(pathname) {
+
+export function fetchFileFromServer(pathname) {
   return (dispatch, getState) => {
     console.log('Fetching File on path "%s"', pathname)
     dispatch(setLoadingStatus(true, pathname, 'Fetching File...'))
@@ -116,16 +125,21 @@ export function fetchFile(pathname) {
   }
 }
 
-// this is currently only saving to the state tree and faking a delay. 
-// this would make a call to an actual API
-export function saveCurrentFile(data) {
-  return (dispatch, getState) => {
-    let currentPath = getState().Files.getIn('current','path')
-    dispatch(setSavingStatus(true, currentPath , 'Fake Saving File...'))
-    return dispatch({type: "saveCurrentInState", data: data})
-    // now we would actually save the file.
-    setTimeout(()=>{
-      dispatch(setSavingStatus(false, currentPath, ''))
+export function createThrottledAction(actionCreator, delay) {
+  return throttle((dispatch, getState) => (...actionArgs) => dispatch(actionCreator(...actionArgs)), delay);
+}
+// this would be a call to an actual API
+let timer = 0;
+
+export function saveFileToServer(pathname) {
+  return(dispatch, getState) => {
+    const path = getState().Files.getIn(['current', 'path'])
+    clearTimeout(timer)
+    console.log('Fake Saving File...', path)
+    dispatch(setSavingStatus(true, path , 'Fake Saving File...'))
+    timer = setTimeout(()=>{
+      dispatch(setSavingStatus(false, path, ''))
     }, 500)
   }
 }
+export const throttledSaveFileToServer = createThrottledAction(saveFileToServer, 3000)

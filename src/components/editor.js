@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import TreeView from 'react-treeview'
 import classnames from 'classnames'
 
-import {saveCurrentFile, ROOT} from '../state/files'
+import {updateCurrentFile, ROOT} from '../state/files'
 import {setSidebarActiveStatus} from '../state/nav'
 
 import Intro from './intro'
@@ -14,7 +14,7 @@ import SimpleEditor from './simple-editor'
 
 export default connect((state) => state)( class Editor extends React.Component {
   onChange(data) {
-    this.props.dispatch(saveCurrentFile(data))
+    this.props.dispatch(updateCurrentFile(data))
     this.props.dispatch(setSidebarActiveStatus(false))
   }
   render() {

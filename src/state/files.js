@@ -100,7 +100,7 @@ export function getTree() {
 
 export function fetchFileFromServer(pathname) {
   return (dispatch, getState) => {
-    console.log('Fetching File on path "%s"', pathname)
+    // console.log('Fetching File on path "%s"', pathname)
     dispatch(setLoadingStatus(true, pathname, 'Fetching File...'))
     fetch(API_HOST + 'files/' + pathname, {
       method: 'GET'
@@ -135,7 +135,7 @@ export function saveFileToServer(pathname) {
   return(dispatch, getState) => {
     const path = getState().Files.getIn(['current', 'path'])
     clearTimeout(timer)
-    console.log('Fake Saving File...', path)
+    // console.log('Fake Saving File on path "%s"', path)
     dispatch(setSavingStatus(true, path , 'Fake Saving File...'))
     timer = setTimeout(()=>{
       dispatch(setSavingStatus(false, path, ''))

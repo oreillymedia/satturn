@@ -14,8 +14,7 @@ const main = React.createClass({
   },
   render: function () {
     let isSaving = this.props.Nav.getIn(['processing', this.props.Files.getIn(['current', 'path']), 'saving'])
-    console.log('is saving on %s? %s', this.props.Files.getIn(['current', 'path']), isSaving )
-    let savingStatus = this.props.Nav.getIn(['processing', this.props.Files.getIn(['current', 'path']), 'saving']) ? "Saving..." : ""
+    let savingStatus = isSaving ? "Saving..." : ""
     return (
       <div>
         <header>

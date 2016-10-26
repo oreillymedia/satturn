@@ -3,13 +3,20 @@ import {connect} from 'react-redux'
 import TreeView from 'react-treeview'
 import classnames from 'classnames'
 
-import {getFile}  from '../state/files'
+import {navigateTo}  from '../state/nav'
+import {setSidebarActiveStatus} from '../state/nav'
 
-export default class FileIndex extends React.Component {
-  
+
+export default connect((state) => state)( class FileIndex extends React.Component {
+  onClick() {
+    this.props.dispatch(setSidebarActiveStatus(!this.props.Nav.get('sidebarActiveStatus')))
+  }
   render() {
+    let sidebarClasses = classnames( "st-file-index",{
+      "st-file-index-collapsed" : !this.props.Nav.get('sidebarActiveStatus')
+    })
     if (!this.props.Files.getIn(['tree','children'])) {
-      return (<div  className="st-file-index" >Loading...</div>)
+      return (<div className={sidebarClasses} >Loading...</div>)
     }
     let children = this.props.Files.getIn(['tree','children']).map( p => {
           return ( p.get('type') == 'directory' 
@@ -18,16 +25,18 @@ export default class FileIndex extends React.Component {
           )
         })
     return (
-      <div className="st-file-index">
-        <h2 className="st-project-name">
+      <div className={sidebarClasses} >
+        <h2 className="st-project-name" onClick={()=> this.onClick()}>
         <i className="material-icons">folder_open</i> &nbsp;
           {this.props.Files.getIn(['tree','name'])}
         </h2>
-        {children}
+        <div className="st-project-tree">
+          {children}
+        </div>
       </div>
     )
   }
-}
+})
 
 export class Folder extends React.Component {
   render() { 
@@ -48,18 +57,18 @@ export class Folder extends React.Component {
 // Connected File
 export const File = connect((state) => state)( class File extends React.Component {
   selectFile(path) {
-    this.props.dispatch(getFile(path))
+    this.props.dispatch(navigateTo(path))
   }
   render() {
-    let isProcessingThisFile = this.props.Files.getIn(['processing', 'status']) && this.props.path == this.props.Files.getIn(['processing', 'path'])
+    let isLoadingThisFile = this.props.Nav.getIn(['processing', this.props.path, 'loading'])
     let classes = classnames( 'st-file', {
       "st-file-selected" : (this.props.path == this.props.Files.getIn(['current', 'path'])),
-      "st-file-loading" :  isProcessingThisFile
+      "st-file-loading" :  isLoadingThisFile
     })
     return ( <div className={classes} onClick={() => this.selectFile(this.props.path) }> 
       {this.props.name} 
       <span className="icon-wrapper"> 
-        { isProcessingThisFile ? <i className="material-icons icon-spinning">autorenew</i> : null}
+        { isLoadingThisFile ? <i className="material-icons icon-spinning">autorenew</i> : null}
       </span>
       </div> );
   }

@@ -1,12 +1,42 @@
 @import '../../node_modules/react-treeview/react-treeview';
 
+.st-file-index{
+  position: fixed;
+  overflow-y: auto;
+  z-index: 20;
+  width: $index-width;
+  background-color: $color-background-lighter;
+  top: 0;
+  padding: #{$header-height} 0 1em 1em;
+  height: 100vh;
+  transition: width $transition-timing,  background-color $transition-timing;
+}
+.st-file-index-collapsed {
+  background-color: transparent;
+  width: $index-width-collapsed;
+  .st-project-name { color: rgba(0,0,0,0);}
+  .st-project-tree { opacity: 0; width: 0; height: 0;}
+}
+
+
 .st-project-name {
   font-weight: normal;
   font-size: 1.4rem;
+  color: rgba(0,0,0,1);
+  transition: color $transition-timing;
+  cursor: w-resize;
+  .st-file-index-collapsed & {
+    cursor: e-resize;
+  }
   .material-icons {
     float: left;
+    color: $black;
   }
 }
+.st-project-tree {
+  transition: width $transition-timing, opacity $transition-timing,height $transition-timing;
+}
+
 .st-file, .st-folder {
   padding: .3em;
 } 

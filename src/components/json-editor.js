@@ -6,6 +6,9 @@ export default class JsonEditor extends React.Component {
   onChange(value) {
     this.props.onChange(JSON.stringify(value))
   }
+  componentWillUnmount() {
+    console.log(this.children)
+  }
   render() {
     return (
       <Json 

@@ -1,5 +1,3 @@
-$header-height: 48px;
-$index-width: 250px;
 
 
 html {
@@ -26,38 +24,37 @@ body {
 header {
   position: relative;
   z-index: 30;
-  padding: .5em 1em;
+  padding: 0 1em;
   background-color: $oreilly-red;
   color: $white;
   height: $header-height;
+  line-height: $header-height;
   h1 {
     margin: 0;
+    float: left;
   }
 }
-
+.st-status {
+  float: right;
+}
 
 main {
   min-height: calc(100vh - #{$header-height});
 }
 
-.st-file-index{
-  position: fixed;
-  overflow-y: auto;
-  z-index: 20;
-  width: $index-width;
-  background-color: $color-background-lighter;
-  top: 0;
-  padding: calc( #{$header-height} + 1em) 0 1em 1em;
-  height: 100vh;
-
-}
-.st-editor {
+.st-intro {
   float: left;
   position: relative;
   z-index: 10;
   margin-left: $index-width;
   width: calc(100% - #{$index-width});
   padding: 1em;
+  h1 {
+    margin-top: 0;
+  }
+  p {
+    font-size: 1.4em;
+  }
 }
 
 footer {

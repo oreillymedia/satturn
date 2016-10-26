@@ -2,6 +2,26 @@
 @import '../components/draft-editor';
 @import '../components/json-editor';
 
+.st-editor {
+  float: left;
+  position: relative;
+  z-index: 10;
+  margin-left: $index-width;
+  width: calc(100% - #{$index-width});
+  padding: 1em;
+  transition: width $transition-timing, margin-left $transition-timing;
+  h1 {
+    margin-top: 0;
+  }
+}
+.st-editor-expanded {
+  width: calc(100% - #{$index-width-collapsed});
+    margin-left: $index-width-collapsed;
+}
+.st-editor-area {
+  
+}
+
 .st-simple-editor {
   font-family: inherit;
   font-size: inherit;

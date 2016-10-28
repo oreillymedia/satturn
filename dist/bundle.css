@@ -715,11 +715,15 @@ span.CodeMirror-selectedtext {
 .MDEditor, .MDOutput {
   width: 50%;
   float: left;
-  padding: 0 2em; }
+  padding-right: 2em; }
 
-.st-button-thebe {
+.st-thebe-buttons {
   float: right;
-  margin-bottom: 1em; }
+  margin-bottom: 1em;
+  margin-right: 2em; }
+
+.thebe_controls {
+  margin-top: .5em; }
 
 /**
  * Draft v0.9.1

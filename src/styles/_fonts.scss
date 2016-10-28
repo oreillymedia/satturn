@@ -1,0 +1,34 @@
+@mixin font-face($font-family, $file-path, $weight: normal, $style: normal, $asset-pipeline: false ) {
+  @font-face {
+    font-family: $font-family;
+    font-weight: $weight;
+    font-style: $style;
+
+    @if $asset-pipeline == true {
+      src: font-url('#{$file-path}.eot');
+      src: font-url('#{$file-path}.eot?#iefix')          format('embedded-opentype'),
+           font-url('#{$file-path}.woff')                format('woff'),
+           font-url('#{$file-path}.ttf')                 format('truetype'),
+           font-url('#{$file-path}.svg##{$font-family}') format('svg');
+    } @else {
+      src: url('#{$file-path}.eot');
+      src: url('#{$file-path}.eot?#iefix')               format('embedded-opentype'),
+           url('#{$file-path}.woff')                     format('woff'),
+           url('#{$file-path}.ttf')                      format('truetype'),
+           url('#{$file-path}.svg##{$font-family}')      format('svg');
+    }
+  }
+}
+
+
+$root: "https://duu86o6n09pv.cloudfront.net/fonts";
+$asset-pipeline: false;
+
+@include font-face("oreilly-urw-typewriter-narro", "#{$root}/URWTypewriter/urwtypewritertotthinnar-webfont", 200, normal );
+@include font-face("oreilly-urw-typewriter-narro", "#{$root}/URWTypewriter/urwtypewritertotthinnar-webfont", normal, normal);
+@include font-face("oreilly-urw-typewriter-narro", "#{$root}/URWTypewriter/urwtypewritertotthinnar-webfont", bold, normal);
+
+@include font-face("Guardian", "#{$root}/GuardianText/GuardianTextSans-Regular-Web", normal, normal);
+@include font-face("Guardian", "#{$root}/GuardianText/GuardianTextSans-RegularIt-Web", normal, italic);
+@include font-face("Guardian", "#{$root}/GuardianText/GuardianTextSans-Bold-Web", 600, normal);
+@include font-face("Guardian", "#{$root}/GuardianText/GuardianTextSans-BoldIt-Web", 600, italic);

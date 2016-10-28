@@ -9,7 +9,7 @@ import {setSidebarActiveStatus} from '../state/nav'
 
 export default connect((state) => state)( class FileIndex extends React.Component {
   onClick() {
-    this.props.dispatch(setSidebarActiveStatus(!this.props.Nav.get('sidebarActiveStatus')))
+    this.props.dispatch(setSidebarActiveStatus(true))
   }
   render() {
     let sidebarClasses = classnames( "st-file-index",{
@@ -25,8 +25,8 @@ export default connect((state) => state)( class FileIndex extends React.Componen
           )
         })
     return (
-      <div className={sidebarClasses} >
-        <h2 className="st-project-name" onClick={()=> this.onClick()}>
+      <div className={sidebarClasses} onClick={()=> this.onClick()}>
+        <h2 className="st-project-name" >
         <i className="material-icons">folder_open</i> &nbsp;
           {this.props.Files.getIn(['tree','name'])}
         </h2>

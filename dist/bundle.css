@@ -31,7 +31,9 @@ header {
   float: right; }
 
 main {
-  min-height: calc(100vh - 48px); }
+  min-height: calc(100vh - 48px);
+  max-width: none !important;
+  padding: 0 !important; }
 
 .st-intro {
   float: left;
@@ -107,15 +109,15 @@ footer {
     opacity: 0;
     width: 0;
     height: 0; }
+  .st-file-index-collapsed:hover {
+    background-color: whitesmoke; }
 
 .st-project-name {
   font-weight: normal;
   font-size: 1.4rem;
   color: black;
   transition: color 0.25s ease;
-  cursor: w-resize; }
-  .st-file-index-collapsed .st-project-name {
-    cursor: e-resize; }
+  cursor: pointer; }
   .st-project-name .material-icons {
     float: left;
     color: #000; }
@@ -145,6 +147,16 @@ footer {
 
 .tree-view_arrow.tree-view_arrow-collapsed:after {
   content: "folder"; }
+
+.icon-spinning {
+  transform-origin: 50% 50%;
+  animation: spin .75s linear infinite; }
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg); }
+  to {
+    transform: rotate(360deg); } }
 
 /**
  * Markdown Editor
@@ -657,10 +669,10 @@ span.CodeMirror-selectedtext {
   color: #000; }
 
 .cm-s-satturn.CodeMirror span.cm-keyword {
-  color: #ff6680; }
+  color: #bd0808; }
 
 .cm-s-satturn.CodeMirror span.cm-string {
-  color: #ffff66; }
+  color: #3d49a7; }
 
 .cm-s-satturn.CodeMirror span.cm-variable {
   color: #000; }
@@ -669,10 +681,10 @@ span.CodeMirror-selectedtext {
   color: #000; }
 
 .cm-s-satturn.CodeMirror span.cm-def {
-  color: #ffcc99; }
+  color: #fd971f; }
 
 .cm-s-satturn.CodeMirror span.cm-bracket {
-  color: #f8f8f2; }
+  color: #282827; }
 
 .cm-s-satturn.CodeMirror span.cm-tag {
   color: #f92672; }
@@ -702,7 +714,12 @@ span.CodeMirror-selectedtext {
 
 .MDEditor, .MDOutput {
   width: 50%;
-  float: left; }
+  float: left;
+  padding: 0 2em; }
+
+.st-button-thebe {
+  float: right;
+  margin-bottom: 1em; }
 
 /**
  * Draft v0.9.1
@@ -1081,7 +1098,8 @@ span.CodeMirror-selectedtext {
   width: 100%;
   border: none;
   outline: none;
-  resize: none; }
+  resize: none;
+  background-color: transparent; }
 
 .st-simple-editor-monospaced {
   font-family: Consolas, Menlo, Monaco, "Lucida Console", monospace; }

@@ -40,6 +40,8 @@ header {
 
 main {
   min-height: calc(100vh - #{$header-height});
+  max-width: none !important;
+  padding: 0 !important;
 }
 
 .st-intro {

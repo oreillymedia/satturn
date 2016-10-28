@@ -16,17 +16,18 @@
   width: $index-width-collapsed;
   .st-project-name { color: rgba(0,0,0,0);}
   .st-project-tree { opacity: 0; width: 0; height: 0;}
+  &:hover {
+    background-color: $color-background-lighter;
+  }
 }
-
-
 .st-project-name {
   font-weight: normal;
   font-size: 1.4rem;
   color: rgba(0,0,0,1);
   transition: color $transition-timing;
-  cursor: w-resize;
+  cursor: pointer;
   .st-file-index-collapsed & {
-    cursor: e-resize;
+    // cursor: e-resize;
   }
   .material-icons {
     float: left;
@@ -61,4 +62,14 @@
 }
 .tree-view_arrow.tree-view_arrow-collapsed:after {
   content: "folder";
+}
+
+.icon-spinning {
+  transform-origin: 50% 50%; 
+  animation: spin .75s linear infinite;
+}
+
+@keyframes spin {
+    from {transform: rotate(0deg);}
+    to {transform: rotate(360deg);}
 }

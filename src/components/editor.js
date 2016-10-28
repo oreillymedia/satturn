@@ -60,7 +60,7 @@ export default connect((state) => state)( class Editor extends React.Component {
       "st-editor-expanded" : !this.props.Nav.get('sidebarActiveStatus')
     })
     return (
-      <div className={editorClass}>
+      <div className={editorClass} onClick={()=> this.props.dispatch(setSidebarActiveStatus(false))}>
         <h1>{file || "Welcome"}</h1>
         <div className="st-editor-area">{chooseEditor()}</div>
       </div>

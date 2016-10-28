@@ -1,14 +1,10 @@
 
-
 $orm-cm-comment   : #758186;
 $orm-cm-number    : #8F8FBB;
-$orm-cm-keyword   : #dd1144;
-$orm-cm-keyword   : hsl(350deg, 100%, 70%);
-$orm-cm-string    : #FFEE87;
-$orm-cm-string    : hsl(60deg, 100%, 70%);
+$orm-cm-keyword   : #bd0808;
+$orm-cm-string    : #3d49a7;
 $orm-cm-def       : #fd971f;
-$orm-cm-def       : hsl(30deg, 100%, 80%);
-$orm-cm-bracket   : #f8f8f2;
+$orm-cm-bracket   : #282827;
 
 // .cm-s-satturn.CodeMirror{
     
@@ -18,7 +14,7 @@ $orm-cm-bracket   : #f8f8f2;
 //     }
 // }
 
-// O'Reilly specific theme for codemirror
+// Satturn theme for codemirror with white background.
 // ----------------------------------------
 
 .cm-s-satturn.CodeMirror {
@@ -33,8 +29,8 @@ $orm-cm-bracket   : #f8f8f2;
 .cm-s-satturn.CodeMirror-wrap { 
   padding-top: 0; 
   padding-left: 0; 
-
 }
+
 // .cm-s-satturn.CodeMirror-focused { background: darken($color-background-dark, 5%) }
 // .cm-s-satturn div.CodeMirror-selected {background: #49483E !important;}
 // .cm-s-satturn.CodeMirror ::selection { background: rgba(73, 72, 62, .99); }

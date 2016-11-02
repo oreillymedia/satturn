@@ -1,5 +1,5 @@
 {
-  "name": "satturn-file-editor",
+  "name": "satturn",
   "version": "1.0.0",
   "description": "A file editor with support for markdown and json",
   "main": "index.js",
@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bravomartin/satturn-file-editor.git"
+    "url": "git+https://github.com/oreillymedia/satturn.git"
   },
   "keywords": [
     "markdown",
@@ -24,9 +24,9 @@
   "author": "Martin Bravo",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/bravomartin/satturn-file-editor/issues"
+    "url": "https://github.com/oreillymedia/satturn/issues"
   },
-  "homepage": "https://github.com/bravomartin/satturn-file-editor#readme",
+  "homepage": "https://github.com/oreillymedia/satturn#readme",
   "dependencies": {
     "classnames": "^2.2.5",
     "commonmark": "^0.26.0",

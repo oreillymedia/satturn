@@ -27,7 +27,6 @@ func main() {
 
 	r := mux.NewRouter()
   r.HandleFunc("/api/{path:.*}", ReadPath).Methods("GET")
-	//r.HandleFunc("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir(".."))))
 	r.PathPrefix("/").Handler(http.FileServer(http.Dir("..")))
 
 	n := negroni.Classic()
@@ -46,7 +45,7 @@ func main() {
 	n.Run(":" + port)
 }
 
-func PathToItem(readPath string) *Item {
+func PathToItem(readPath string, level int) *Item {
 
   stat, err := os.Stat(readPath)
   if(err != nil) {
@@ -60,14 +59,15 @@ func PathToItem(readPath string) *Item {
   }
 
   if stat.IsDir() {
+		level += 1
     item.Type = "directory"
     stats, _ := ioutil.ReadDir(readPath)
     for _, s := range stats {
-      childItem := PathToItem(path.Join(readPath, s.Name()))
+      childItem := PathToItem(path.Join(readPath, s.Name()), level)
       childItem.Parent = item.Name
       item.Children = append(item.Children, childItem)
 	  }
-  } else {
+  } else if level == 0 {
 		content, _ := ioutil.ReadFile(path.Join(readPath))
 		item.Content = string(content)
 	}
@@ -80,7 +80,7 @@ func ReadPath(w http.ResponseWriter, req *http.Request) {
   vars := mux.Vars(req)
   readPath := path.Join(root, vars["path"])
 
-  item := PathToItem(readPath)
+  item := PathToItem(readPath, 0)
 
   data, _ := json.Marshal(item)
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")

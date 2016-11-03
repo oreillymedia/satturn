@@ -26,7 +26,9 @@ type Item struct {
 func main() {
 
 	r := mux.NewRouter()
-  r.HandleFunc("/{path:.*}", ReadPath).Methods("GET")
+  r.HandleFunc("/api/{path:.*}", ReadPath).Methods("GET")
+	//r.HandleFunc("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir(".."))))
+	r.PathPrefix("/").Handler(http.FileServer(http.Dir("..")))
 
 	n := negroni.Classic()
 	n.UseHandler(r)

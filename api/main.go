@@ -14,7 +14,7 @@ import (
 )
 
 var root string = GetAppDir() + "/test-data/files/"
-var cwd string = GetAppDir()
+var approot string = GetAppDir()
 
 type Item struct {
 	Parent   string  `json:"parent,omitempty"`
@@ -31,24 +31,27 @@ type Response struct {
 
 func main() {
 
-	r := mux.NewRouter()
-	r.HandleFunc("/api/{path:.*}", ReadPath).Methods("GET")
-	r.HandleFunc("/api/{path:.*}", WritePathToFile).Methods("POST")
-	r.PathPrefix("/").Handler(http.FileServer(http.Dir(cwd)))
-	r.PathPrefix("/files/").Handler(http.FileServer(http.Dir(root)))
-
-	n := negroni.Classic()
-	n.UseHandler(r)
-
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "3300"
 	}
-
 	newRoot := os.Getenv("ROOT")
 	if newRoot != "" {
 		root = newRoot
 	}
+	newApproot := os.Getenv("APPROOT")
+	if newApproot != "" {
+		approot = newApproot
+	}
+
+	r := mux.NewRouter()
+	r.HandleFunc("/api/{path:.*}", ReadPath).Methods("GET")
+	r.HandleFunc("/api/{path:.*}", WritePathToFile).Methods("POST")
+	r.PathPrefix("/").Handler(http.FileServer(http.Dir(approot)))
+	r.PathPrefix("/files/").Handler(http.FileServer(http.Dir(root)))
+
+	n := negroni.Classic()
+	n.UseHandler(r)
 
 	n.Run(":" + port)
 }

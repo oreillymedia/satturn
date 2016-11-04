@@ -21,9 +21,7 @@ export const INITIAL_STATE = fromJS({
     
   }
 })
-export const API_HOST = process.env.API_HOST || window.location.origin + (window.location.pathname + '/test-data/').replace(/\/{2,}/g, '/')
-export const ROOT = process.env.ROOT || window.location.origin + (window.location.pathname + '/test-data/files/').replace(/\/{2,}/g, '/')
-
+export const API_HOST = process.env.API_HOST || window.location.origin + (window.location.pathname + '/api/').replace(/\/{2,}/g, '/')
 
 /*********************************************************************
 ||  The reducer
@@ -76,7 +74,8 @@ export function updateCurrentFile(data) {
 export function getTree() {
   return (dispatch, getState) => {
     dispatch(setLoadingStatus(true, '/', 'Fetching File Index...'))
-    fetch( API_HOST + 'index', {
+    console.log(API_HOST)
+    fetch( API_HOST, {
       method: 'GET',
     })
     .then( response => {
@@ -85,6 +84,7 @@ export function getTree() {
       return response.json()
     })
     .then( json => {
+      console.log(json)
       dispatch(setTree(fromJS(json)))
       dispatch(setLoadingStatus(false, '', ''))
     })
@@ -102,16 +102,16 @@ export function fetchFileFromServer(pathname) {
   return (dispatch, getState) => {
     // console.log('Fetching File on path "%s"', pathname)
     dispatch(setLoadingStatus(true, pathname, 'Fetching File...'))
-    fetch(API_HOST + 'files/' + pathname, {
+    fetch(API_HOST + pathname, {
       method: 'GET'
     })
     .then( response => {
       if (!response.ok) {throw response}
-      return response.text()
+      return response.json()
     })
-    .then( text => {
+    .then( data => {
       dispatch(setLoadingStatus(false, pathname, ''))
-      dispatch(setCurrentFile(pathname, text))
+      dispatch(setCurrentFile(pathname, data.content))
     })
     .catch( err => {
       console.log(err)

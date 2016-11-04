@@ -6,12 +6,10 @@ A really simple example:
 hey = "hello world", 38+4
 print(hey)
 </pre>
-
-
+ donde vamos
 <pre class="output_subarea output_stream output_stdout output_text" data-output="true">
 ('hello world', 42)
 </pre>
-
 
 ## More complicated example
 

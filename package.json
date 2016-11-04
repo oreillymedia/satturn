@@ -4,7 +4,7 @@
   "description": "A file editor with support for markdown and json",
   "main": "index.js",
   "scripts": {
-    "start": "python -m SimpleHTTPServer 3003",
+    "start": "./api/api",
     "develop": "npm run watch & npm run start",
     "watch": "npm run scss:watch & npm run watchify",
     "watchify": "watchify -o dist/bundle.js src/index.js -dv",

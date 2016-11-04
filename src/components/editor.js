@@ -2,8 +2,9 @@ import React from 'react'
 import {connect} from 'react-redux'
 import TreeView from 'react-treeview'
 import classnames from 'classnames'
+import throttle from 'lodash.throttle'
 
-import {updateCurrentFile, ROOT} from '../state/files'
+import {updateCurrentFile, saveCurrentFile} from '../state/files'
 import {setSidebarActiveStatus} from '../state/nav'
 
 import Intro from './intro'
@@ -13,9 +14,16 @@ import JsonEditor from './json-editor'
 import SimpleEditor from './simple-editor'
 
 export default connect((state) => state)( class Editor extends React.Component {
+  componentWillMount() {
+    this.throttledSave = throttle(()=>{
+      console.log('saving...')
+      return this.props.dispatch(saveCurrentFile())
+    }, 2000, {leading: false, trailing: true})
+  }
   onChange(data) {
     this.props.dispatch(updateCurrentFile(data))
     this.props.dispatch(setSidebarActiveStatus(false))
+    this.throttledSave()
   }
   render() {
     let file = this.props.file.get('path').split('/').pop()
@@ -24,7 +32,7 @@ export default connect((state) => state)( class Editor extends React.Component {
     let chooseEditor = ()=> {
         switch(true){
           case /.(jpe?g|png|psd|tift?|gif|svg)$/.test(file):
-            return (<div className="st-image-preview"><img src={ROOT + this.props.file.get('path')}/></div>)
+            return (<div className="st-image-preview"><img src={"/file/" + this.props.file.get('path')}/></div>)
           case /.(md)$/.test(file):
             return (<MdEditor key={this.props.file.get('path')} 
                       content={this.props.file.get('data')}

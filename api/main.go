@@ -13,8 +13,8 @@ import (
 	"github.com/gorilla/mux"
 )
 
-var root string = GetCwd() + "/../test-data/files"
-var cwd string = GetCwd()
+var root string = GetAppDir() + "/test-data/files/"
+var cwd string = GetAppDir()
 
 type Item struct {
 	Parent   string  `json:"parent,omitempty"`
@@ -24,12 +24,19 @@ type Item struct {
 	Children []*Item `json:"children,omitempty"`
 	Content  string  `json:"content,omitempty"`
 }
+type Response struct {
+	Status     string `json:"status"`
+	StatusCode int    `json:"statusCode"`
+}
 
 func main() {
 
 	r := mux.NewRouter()
 	r.HandleFunc("/api/{path:.*}", ReadPath).Methods("GET")
-	r.PathPrefix("/").Handler(http.FileServer(http.Dir(cwd + "/..")))
+	r.HandleFunc("/api/{path:.*}", WritePathToFile).Methods("POST")
+	r.PathPrefix("/").Handler(http.FileServer(http.Dir(cwd)))
+	r.PathPrefix("/files/").Handler(http.FileServer(http.Dir(root)))
+
 	n := negroni.Classic()
 	n.UseHandler(r)
 
@@ -85,11 +92,41 @@ func ReadPath(w http.ResponseWriter, req *http.Request) {
 	w.Write(data)
 }
 
-func GetCwd() string {
-	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+func WritePathToFile(w http.ResponseWriter, req *http.Request) {
+	res := Response{
+		Status:     "ok",
+		StatusCode: 200,
+	}
+	vars := mux.Vars(req)
+	filePath := path.Join(root, vars["path"])
+	content := req.FormValue("content")
+	stat, err := os.Stat(filePath)
+	if err != nil {
+		res.Status = "file not found"
+		res.StatusCode = 404
+		fmt.Println("ERROR!", err)
+	}
+	if content == "" {
+		res.Status = "not ok"
+		res.StatusCode = 400
+		fmt.Println("ERROR!", "content is empty")
+	} else {
+		ioutil.WriteFile(filePath, []byte(content), stat.Mode())
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.WriteHeader(res.StatusCode)
+	}
+	data, _ := json.Marshal(res)
+	w.Write(data)
+}
+
+func GetAppDir() string {
+	d, e := filepath.Abs(filepath.Dir(os.Args[0]))
+	if e != nil {
+		fmt.Println(e)
+	}
+	dir, err := filepath.Abs(d + "/..")
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(dir)
 	return dir
 }

@@ -4,14 +4,18 @@
   "description": "A file editor with support for markdown and json",
   "main": "index.js",
   "scripts": {
-    "start": "./api/api",
+    "start": "ROOT=./test-data/files/ PORT=8001 APPROOT=./ bash -c './api/api'",
     "develop": "npm run watch & npm run start",
     "watch": "npm run scss:watch & npm run watchify",
     "watchify": "watchify -o dist/bundle.js src/index.js -dv",
     "build": "npm run scss -- --output-style compressed & browserify src/index.js | uglifyjs > dist/bundle.js",
     "scss": "node-sass src/styles/bundle.scss -o dist/",
     "scss:watch": "npm run scss & npm run scss -- -rw src/styles/",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "api:build": "go build -o ./api/api ./api",
+    "api:build-linux": "env GOOS=linux GOARCH=arm go build -o ./api/api-linux ./api"
+
+
   },
   "repository": {
     "type": "git",

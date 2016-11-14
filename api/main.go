@@ -47,8 +47,8 @@ func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/api/{path:.*}", ReadPath).Methods("GET")
 	r.HandleFunc("/api/{path:.*}", WritePathToFile).Methods("POST")
+	r.PathPrefix("/files/").Handler(http.StripPrefix("/files/", http.FileServer(http.Dir(root))))
 	r.PathPrefix("/").Handler(http.FileServer(http.Dir(approot)))
-	r.PathPrefix("/files/").Handler(http.FileServer(http.Dir(root)))
 
 	n := negroni.Classic()
 	n.UseHandler(r)

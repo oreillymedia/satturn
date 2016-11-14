@@ -32,7 +32,7 @@ export default connect((state) => state)( class Editor extends React.Component {
     let chooseEditor = ()=> {
         switch(true){
           case /.(jpe?g|png|psd|tift?|gif|svg)$/.test(file):
-            return (<div className="st-image-preview"><img src={"/file/" + this.props.file.get('path')}/></div>)
+            return (<div className="st-image-preview"><img src={"/files/" + this.props.file.get('path')}/></div>)
           case /.(md)$/.test(file):
             return (<MdEditor key={this.props.file.get('path')} 
                       content={this.props.file.get('data')}

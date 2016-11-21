@@ -21,6 +21,7 @@ export const INITIAL_STATE = fromJS({
   }
 })
 export const API_HOST = process.env.API_HOST || window.location.origin + (window.location.pathname + '/api/').replace(/\/{2,}/g, '/')
+// const API_HOST = "http://0.0.0.0:32775/api/"
 
 /*********************************************************************
 ||  The reducer

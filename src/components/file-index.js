@@ -40,13 +40,17 @@ export default connect((state) => state)( class FileIndex extends React.Componen
 
 export class Folder extends React.Component {
   render() { 
-    let children = this.props.children.map( (child, i)=> {
-        return ( child.type == 'directory'
-          ? <Folder key={child.path} {...child} />
-          : <File key={child.path} {...child} />
-          )
-      })
+    let children = null;
+    if (this.props.children) {
+      let children = this.props.children.map( (child, i)=> {
+          return ( child.type == 'directory'
+            ? <Folder key={child.path} {...child} />
+            : <File key={child.path} {...child} />
+            )
+        })  
+    }
     let classes = classnames( 'st-folder')
+
     return ( <TreeView nodeLabel={this.props.name} className={classes} defaultCollapsed={true} > 
       { children }
       </TreeView>

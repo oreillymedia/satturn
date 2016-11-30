@@ -3,7 +3,7 @@
 *********************************************************************/
 import {fromJS, Map} from 'immutable'
 import createHistory from 'history/createHashHistory' 
-import {fetchFileFromServer} from './files'
+import {fetchFileFromServer, fetchExtraFileFromServer} from './files'
 import {store} from '../'
 
 export const History = createHistory()
@@ -13,7 +13,11 @@ export const History = createHistory()
 *********************************************************************/
 export const INITIAL_STATE = fromJS({
   currentPath: "",
-  sidebarActiveStatus: true
+  sidebarActiveStatus: true,
+  status: {
+    status: 'ok',
+    message: ''
+  },
 })
 
 /*********************************************************************
@@ -25,10 +29,8 @@ export default function(state = INITIAL_STATE, action) {
       return state.set("currentPath", action.currentPath)
     case "setSidebarActiveStatus":
       return state.set("sidebarActiveStatus", action.status)
-    case "setLoadingStatus":
-      return state.setIn(['processing', action.path], fromJS({'loading': action.status, 'message' : action.message}))
-    case "setSavingStatus":
-      return state.setIn(['processing', action.path], fromJS({'saving': action.status, 'message' : action.message}))
+    case "updateStatusBar":
+      return state.update('status', (status)=> status.merge({status: action.status, message: action.message, timer: action.timer}))
   }
   return state;
 }
@@ -48,13 +50,34 @@ export function navigateTo(pathname) {
 
     // avoid duplicated fetch
     if (getState().Files.getIn(['processing', 'path']) !== newPathname) {
-      dispatch(fetchFileFromServer(newPathname))  
+      dispatch(fetchFileFromServer(newPathname))
+      if (newPathname == 'cues.json') {
+        dispatch(fetchExtraFileFromServer('main.html'))  
+      }
     }
   }
 }
 export function setSidebarActiveStatus(status) {
   return (dispatch, getState) => {
     dispatch({type: "setSidebarActiveStatus", status: status})
+  }
+}
+
+export function updateStatusBar(status, expires = true){
+  return (dispatch, getState) => {
+    clearTimeout(getState().Nav.getIn(['status', 'timer']))
+    let timer;
+    if (expires){
+      timer = setTimeout(()=>{
+        dispatch(resetStatusBar())
+      }, 5000)  
+    }
+    dispatch(Object.assign(status, {type: "updateStatusBar", timer: timer}))
+  }
+}
+export function resetStatusBar(){
+  return (dispatch, getState) => {
+   dispatch({type: "updateStatusBar", status: 'ok', message: ''})
   }
 }
 
@@ -71,19 +94,7 @@ export function watchHistoryChanges(status) {
   }
 }
 
-export function setLoadingStatus(status, path, message) {
-  return (dispatch, getState) => {
-    return dispatch({type: "setLoadingStatus", status: status, path: normalizedPathname(path), message: message})
-  }
-}
-export function setSavingStatus(status, path, message) {
-  return (dispatch, getState) => {
-    return dispatch({type: "setSavingStatus", status: status, path: normalizedPathname(path), message: message})
-  }
-}
-
-
-function normalizedPathname(pathname){
+export function normalizedPathname(pathname){
   if (/^\//.test(pathname)) {
     return pathname.slice(1)
   }

@@ -42,7 +42,7 @@ export class Folder extends React.Component {
   render() { 
     let children = null;
     if (this.props.children) {
-      let children = this.props.children.map( (child, i)=> {
+      children = this.props.children.map( (child, i)=> {
           return ( child.type == 'directory'
             ? <Folder key={child.path} {...child} />
             : <File key={child.path} {...child} />
@@ -50,7 +50,7 @@ export class Folder extends React.Component {
         })  
     }
     let classes = classnames( 'st-folder')
-
+    
     return ( <TreeView nodeLabel={this.props.name} className={classes} defaultCollapsed={true} > 
       { children }
       </TreeView>
@@ -64,15 +64,29 @@ export const File = connect((state) => state)( class File extends React.Componen
     this.props.dispatch(navigateTo(path))
   }
   render() {
-    let isLoadingThisFile = this.props.Nav.getIn(['processing', this.props.path, 'loading'])
-    let classes = classnames( 'st-file', {
-      "st-file-selected" : (this.props.path == this.props.Files.getIn(['current', 'path'])),
-      "st-file-loading" :  isLoadingThisFile
+    let status;
+    let isCurrent = this.props.path == this.props.Files.getIn(['current', 'path'])
+    if (isCurrent) {
+      status = this.props.Files.getIn(['current', 'status'])
+      // console.log(status, this.props.path )
+    }
+    let icon = classnames({
+      "autorenew" : (status == 'loading'),
+      "save" : (status == 'saving'),
+      "check" : (status == 'saved')
     })
+    let iconClass = classnames('material-icons', {
+      "icon-spinning" : (status == 'loading'),
+      "icon-blinking" : (status == 'saving')
+    })
+    let classes = classnames( 'st-file', {
+      "st-file-selected" : (isCurrent)
+    })
+    // console.log('icon: ', icon)
     return ( <div className={classes} onClick={() => this.selectFile(this.props.path) }> 
       {this.props.name} 
       <span className="icon-wrapper"> 
-        { isLoadingThisFile ? <i className="material-icons icon-spinning">autorenew</i> : null}
+        <i className={iconClass}>{icon}</i>
       </span>
       </div> );
   }

@@ -1,6 +1,7 @@
-@import '../components/md-editor';
-@import '../components/draft-editor';
-@import '../components/json-editor';
+@import '../components/editors/md-editor';
+@import '../components/editors/draft-editor';
+@import '../components/editors/json-editor';
+@import '../../node_modules/@oreillymedia/annotator/dist/main';
 
 .st-editor {
   float: left;
@@ -35,4 +36,13 @@
 }
 .st-simple-editor-monospaced {
   font-family: $monospaced;
+}
+
+.st-cue-annotator {
+  article.content {
+    margin-top: 0;
+  }
+  .videoPanel {
+    top: 48px;
+  }
 }

@@ -13,17 +13,16 @@ const main = React.createClass({
     this.props.dispatch(watchHistoryChanges())
   },
   render: function () {
-    let isSaving = this.props.Nav.getIn(['processing', this.props.Files.getIn(['current', 'path']), 'saving'])
-    let savingStatus = isSaving ? "Saving..." : ""
+    let message = this.props.Files.getIn(['current', 'message'])
     return (
       <div>
         <header>
           <h1>Satturn</h1>
-          <div className="st-status">{savingStatus}</div>
+          <div className="st-status">{message}</div>
         </header>
         <main>
           <FileIndex {...this.props} />
-          {this.props.Files.getIn(['current', 'path']).length > 0 
+          {this.props.Files.getIn(['current', 'path'])
           ? <Editor file={this.props.Files.get('current')} {...this.props} /> 
           : <Intro/>}
         </main>

@@ -1,4 +1,4 @@
-@import '../../node_modules/draft-js/dist/Draft';
+@import '../../../node_modules/draft-js/dist/Draft';
 
 
 .RichEditor-root {
@@ -19,8 +19,10 @@
 .RichEditor-editor pre {
   width: initial;
   float: initial;
+  color: #555555;
   > pre {
     background: none;
+
     border: none;
     margin: 0;
     padding: 0;

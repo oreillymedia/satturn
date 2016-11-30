@@ -112,6 +112,15 @@ footer {
   .st-file-index-collapsed:hover {
     background-color: whitesmoke; }
 
+.tree-view_children {
+  max-height: 200vh;
+  transition: max-height 250ms ease; }
+
+.tree-view_children-collapsed {
+  height: auto;
+  max-height: 0;
+  overflow: hidden; }
+
 .st-project-name {
   font-weight: normal;
   font-size: 1.4rem;
@@ -909,7 +918,8 @@ span.CodeMirror-selectedtext {
 
 .RichEditor-editor pre {
   width: initial;
-  float: initial; }
+  float: initial;
+  color: #555555; }
   .RichEditor-editor pre > pre {
     background: none;
     border: none;
@@ -1080,6 +1090,83 @@ span.CodeMirror-selectedtext {
     padding: 0;
     margin: 0; }
 
+button {
+  -webkit-appearance: none;
+  background-color: #f30;
+  border: 1px solid #f30;
+  color: #fff;
+  font-size: inherit;
+  font-family: inherit;
+  padding: .25em .75em;
+  display: inline-block;
+  margin: .5em 0 .5em .5em; }
+
+.videoPanel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 360px;
+  background-color: #e2e2e2; }
+
+.time {
+  padding: .5em;
+  display: inline-block;
+  width: 60px; }
+
+.content {
+  margin-right: 360px;
+  margin-top: 200px;
+  padding-top: 0;
+  margin-bottom: calc(100vh - 200px); }
+
+.cueDisplay {
+  clear: both;
+  display: block;
+  width: 100%;
+  padding: 1em;
+  height: 600px; }
+
+.shortcuts {
+  padding: .5em;
+  color: #888;
+  font-size: .75em; }
+
+.shortcuts code {
+  background-color: #c9c9c9;
+  padding: .1em .5em; }
+
+.content {
+  padding: 2em; }
+
+.content [id] {
+  cursor: pointer; }
+
+.content [id]:before {
+  content: "\25BA";
+  color: #e2e2e2;
+  font-size: .6em;
+  position: relative;
+  top: -.15em;
+  padding: 0 .25rem; }
+
+.content [id].annotator-highlight {
+  background-color: #fe0;
+  padding: 0 .25em; }
+
+.content [id].annotator-highlight:before {
+  color: #000 !important; }
+
+.content a[id], .content code[id], .content i[id], .content span[id] {
+  background-color: #c9c9c9;
+  min-width: 1em;
+  display: inline-block;
+  margin: 0 .125rem; }
+
+.content a[id].annotator-highlight, .content code[id].annotator-highlight, .content i[id].annotator-highlight, .content span[id].annotator-highlight {
+  background-color: #fe0; }
+
+/*# sourceMappingURL=main.css.map*/
 .st-editor {
   float: left;
   position: relative;
@@ -1107,3 +1194,9 @@ span.CodeMirror-selectedtext {
 
 .st-simple-editor-monospaced {
   font-family: Consolas, Menlo, Monaco, "Lucida Console", monospace; }
+
+.st-cue-annotator article.content {
+  margin-top: 0; }
+
+.st-cue-annotator .videoPanel {
+  top: 48px; }

@@ -20,6 +20,15 @@
     background-color: $color-background-lighter;
   }
 }
+.tree-view_children {
+  max-height: 200vh;
+  transition: max-height 250ms ease;
+}
+.tree-view_children-collapsed {
+  height: auto;
+  max-height: 0;
+  overflow: hidden;
+}
 .st-project-name {
   font-weight: normal;
   font-size: 1.4rem;

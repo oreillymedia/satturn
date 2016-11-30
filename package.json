@@ -14,8 +14,6 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "api:build": "go build -o ./api/api ./api",
     "api:build:linux": "env GOOS=linux GOARCH=386 go build -o ./api/api-linux ./api"
-
-
   },
   "repository": {
     "type": "git",
@@ -33,14 +31,16 @@
   },
   "homepage": "https://github.com/oreillymedia/satturn#readme",
   "dependencies": {
+    "@oreillymedia/annotator": "0.0.4",
     "classnames": "^2.2.5",
     "commonmark": "^0.26.0",
     "draft-js": "^0.9.1",
     "draft-js-export-html": "^0.5.0",
     "draft-js-import-html": "^0.3.0",
     "history": "^4.3.0",
+    "immutable": "^3.8.1",
     "lodash.throttle": "^4.1.1",
-    "react": "^15.3.2",
+    "react": "^15.4.1",
     "react-autosize-textarea": "^0.3.3",
     "react-dom": "^15.3.2",
     "react-json": "^0.2.1",
@@ -69,7 +69,7 @@
     "babel-preset-react": "^6.16.0",
     "babelify": "^7.3.0",
     "browserify": "^13.1.0",
-    "dir-to-json": "0.0.3",    
+    "dir-to-json": "0.0.3",
     "node-sass": "^3.10.1",
     "reactify": "^1.1.1",
     "uglify-js": "^2.7.4",

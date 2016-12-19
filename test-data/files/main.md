@@ -6,17 +6,16 @@ A really simple example:
 hey = "hello world", 38+4
 print(hey)
 </pre>
- donde vamos acá
+
 <pre class="output_subarea output_stream output_stdout output_text" data-output="true">
 ('hello world', 42)
 </pre>
 
 ## More complicated example
 
-
 <pre data-code-language="python" data-executable="true" data-type="programlisting">
 x = [1,1]
-for i in range(10):    
+for i in range(12):
     x.append(x[-1] + x[-2]) 
 print(', '.join(str(y) for y in x))
 </pre>

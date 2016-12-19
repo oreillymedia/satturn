@@ -1,15 +1,23 @@
 /*********************************************************************
 ||  Import required modules
 *********************************************************************/
-import {fromJS, Map, findKey, keyOf} from 'immutable'
+import  {fromJS, Map, findKey, keyOf, Seq} from 'immutable'
+
 import History from '../history'
 import {updateStatusBar} from './nav'
+
+import TreeUtils from 'immutable-treeutils';
+export const treeUtils = new TreeUtils(Seq.of('tree'), 'id', 'children');
+
+export const API_HOST = process.env.API_HOST || window.location.origin + (window.location.pathname + '/api/').replace(/\/{2,}/g, '/')
 
 /*********************************************************************
 ||  Define the state tree
 *********************************************************************/
 export const INITIAL_STATE = fromJS({
   tree: {},
+  queue: {},
+  selected: [], 
   current: {
     path: '',
     data: '',
@@ -24,28 +32,24 @@ export const INITIAL_STATE = fromJS({
     valid: false
   }
 })
-export const API_HOST = process.env.API_HOST || window.location.origin + (window.location.pathname + '/api/').replace(/\/{2,}/g, '/')
-// const API_HOST = "http://0.0.0.0:32775/api/"
+
+
 
 /*********************************************************************
 ||  The reducer
 *********************************************************************/
 export default function(state = INITIAL_STATE, action) {
+  
   switch (action.type) {
     case "setTree" :
       return state.set('tree', action.tree)
-    case "setCurrentFile":
-      return state.update('current', (current) => current.merge({'data': action.data, path: action.path, valid: action.valid}) )
-    case "updateCurrentFileData":
-      return state.setIn(['current', 'data'], action.data)
-    case "updateCurrentFileStatus":
-      return state.update('current', (current)=> current.merge(action) )
-    case "validateCurrentFile":
-      return state.updateIn(['current', 'valid'], action.valid)  
-    case "updateStatusInFile":
-      state = state.update('tree', (tree)=> updateFileInTree(tree, action.path, {status: action.status}))
-    case "setExtraFile":
-      return state.update('extra', (current) => current.merge({'data': action.data, path: action.path, valid: action.valid}) )
+    
+    case "updateFile":
+      if (action.keyPath) {
+        state = state.updateIn(action.keyPath, (node)=> node.merge(action.data) )  
+        console.log( state.getIn(action.keyPath).toJS() )
+        return state
+      }
   }
   return state;
 }
@@ -61,63 +65,23 @@ export function setTree(tree) {
   }
 }
 
-export function validateCurrentFile(valid) {
-  return (dispatch, getState) => {
-    return dispatch({action: "validateCurrentFile" ,valid: valid})
-  }
-}
-
-export function setCurrentFile(path, data) {
-  return (dispatch, getState) => {
-    return dispatch({type: "setCurrentFile", path: path, data: data, valid: true})
-  }
-}
-export function setExtraFile(path, data) {
-  return (dispatch, getState) => {
-    return dispatch({type: "setExtraFile", path: path, data: data, valid: true})
-  }
-}
-
-
-export function updateCurrentFileData(data) {
-  return (dispatch, getState) => {
-    let currentPath = getState().Files.getIn(['current','path'])
-    return dispatch({type: "updateCurrentFileData", data: data})
-  }
-}
-
-export function updateCurrentFileStatus( status, expires = true) {
-  return (dispatch, getState) => {
-    clearTimeout(getState().Files.getIn(['current', 'timer']))
-    let timer;
+export function updateFile(path, data, expires = false) {
+ return (dispatch, getState) => {
+    let {Files} = getState();
+    let keyPath = treeUtils.find(Files, node => node.get('path') === path )
+    let timer = (keyPath) ? Files.getIn(keyPath.concat('timer')) : null;
+    clearTimeout(timer)
     if (expires){
       timer = setTimeout(()=>{
-        dispatch(resetCurrentFileStatus())
+        dispatch({type: "updateFile", path: path, keyPath: keyPath, data: {status: "ok", message: "", timer : timer } })
       }, 5000)  
     }
-    dispatch(updateStatusBar(status, expires))
-    return dispatch(Object.assign({}, status, {type: "updateCurrentFileStatus", timer: timer}))
-  }
+    data.timer = timer;
+    return dispatch({type: "updateFile", path: path, keyPath: keyPath, data: data})
+ } 
 }
 
-export function resetCurrentFileStatus() {
-  return (dispatch, getState) => {    
-    dispatch({type: "updateCurrentFileStatus", status: 'ok', message: '' })
-  }
-}
 
-export function saveCurrentFileToServer(data) {
-  return (dispatch, getState) => {
-    let currentPath = getState().Files.getIn(['current','path'])
-    return dispatch(saveFileToServer(currentPath))
-  }
-}
-
-export function updateStatusInFile(path, status) {
-  return (dispatch, getState) => {
-    return dispatch({type: "updateStatusInFile", path: path, status: status})
-  }
-}
 
 
 /*********************************************************************
@@ -149,9 +113,9 @@ export function getTree() {
 }
 
 
-export function fetchFileFromServer(pathname) {
+export function fetchFile(pathname) {
   return (dispatch, getState) => {
-    dispatch(updateCurrentFileStatus({path: pathname, status:'loading', message:'Loading...', valid: false}))
+    dispatch(updateFile(pathname, { status:'loading', message:'Loading...' }, false))
     fetch(API_HOST + pathname, {
       method: 'GET'
     })
@@ -160,15 +124,14 @@ export function fetchFileFromServer(pathname) {
       return response.json()
     })
     .then( data => {
-      dispatch(setCurrentFile(pathname, data.content))
-      dispatch(updateCurrentFileStatus({path: pathname, status:'loaded', message:'', valid: true}))
+      dispatch(updateFile(pathname, {data: data.content, status:'loaded', message:'', loaded: true}))
     })
     .catch( (err) => {
       console.log(err)
       if (err.status == 404) {
-        return dispatch(updateCurrentFileStatus({path: pathname, status:'error', message:'Error Loading File. ' + err.statusText}))
+        return dispatch(updateFile(pathname, {status:'error', message:'File not found. ' + err.statusText, loaded: false}))
       }
-      dispatch(updateCurrentFileStatus({path: pathname, status:'error', message:'Disconnected from server'}))
+      dispatch(updateStatusBar({status:'error', message:'Server Error'}, true))
       err.text().then( msg => {
         console.error(msg)
       })
@@ -176,31 +139,11 @@ export function fetchFileFromServer(pathname) {
   }
 }
 
-export function fetchExtraFileFromServer(pathname) {
-  return (dispatch, getState) => {
-    fetch(API_HOST + pathname, {
-      method: 'GET'
-    })
-    .then( response => {
-      if (!response.ok) {throw response}
-      return response.json()
-    })
-    .then( data => {
-      dispatch(setExtraFile(pathname, data.content))
-    })
-    .catch( (err) => {
-      console.log(err)
-    })
-  }
-}
-
-
-export function saveFileToServer(pathname) {
+export function saveFileToServer(pathname, content) {
   return(dispatch, getState) => {
-    dispatch(updateCurrentFileStatus({path: pathname, status: 'saving', message: 'Saving File...'}))
-    const content = getState().Files.getIn(['current', 'data'])    
+    dispatch(updateFile(pathname, { status: 'saving', message: 'Saving File...'}))
     const data = new FormData();
-    data.append( "content", content );    
+    data.append( "content", content );
     fetch(API_HOST + pathname, {
       method: 'POST',
       body: data
@@ -210,30 +153,16 @@ export function saveFileToServer(pathname) {
       return response.json()
     })
     .then( data => {
-      dispatch(updateCurrentFileStatus({status: 'saved',  message: 'Saved'}))
+      dispatch(updateFile(pathname, {status: 'saved',  message: 'Saved'}, true))
     })
     .catch( err => {
       console.log(err)
       if (err.status == 404) {
-        dispatch(updateCurrentFileStatus({status: 'error', message: 'Error saving file'}))
-        return dispatch(validateCurrentFile(false))
+        dispatch(updateFile(pathname, {status: 'error', message: 'Error saving file'}))
       }
       err.text().then( msg => {
         console.error(msg)
       })
     })
-  }
-}
-
-
-function updateFileInTree(node, pathname, data) {
-  if (node.get('path') == pathname){
-    // console.log('-->\n', node.toJS())
-    return node.merge(data)
-  } else {
-    if (node.has('children')) {
-      return node.update('children', (children)=> children.map( child=> updateFileInTree(child, pathname, data) ) )  
-    }
-    return node
   }
 }

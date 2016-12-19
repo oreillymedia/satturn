@@ -47,7 +47,7 @@ export default function(state = INITIAL_STATE, action) {
     case "updateFile":
       if (action.keyPath) {
         state = state.updateIn(action.keyPath, (node)=> node.merge(action.data) )  
-        console.log( state.getIn(action.keyPath).toJS() )
+        // console.log( "done updating %s", state.getIn(action.keyPath).get('path'), state.getIn(action.keyPath).toJS() )
         return state
       }
   }
@@ -89,7 +89,7 @@ export function updateFile(path, data, expires = false) {
 *********************************************************************/
 export function getTree() {
   return (dispatch, getState) => {
-    fetch( API_HOST, {
+    return fetch( API_HOST, {
       method: 'GET',
     })
     .then( response => {
@@ -116,7 +116,7 @@ export function getTree() {
 export function fetchFile(pathname) {
   return (dispatch, getState) => {
     dispatch(updateFile(pathname, { status:'loading', message:'Loading...' }, false))
-    fetch(API_HOST + pathname, {
+    return fetch(API_HOST + pathname, {
       method: 'GET'
     })
     .then( response => {
@@ -125,6 +125,7 @@ export function fetchFile(pathname) {
     })
     .then( data => {
       dispatch(updateFile(pathname, {data: data.content, status:'loaded', message:'', loaded: true}))
+      console.log( "done fetching %s", pathname )
     })
     .catch( (err) => {
       console.log(err)
@@ -144,7 +145,7 @@ export function saveFileToServer(pathname, content) {
     dispatch(updateFile(pathname, { status: 'saving', message: 'Saving File...'}))
     const data = new FormData();
     data.append( "content", content );
-    fetch(API_HOST + pathname, {
+    return fetch(API_HOST + pathname, {
       method: 'POST',
       body: data
     })

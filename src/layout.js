@@ -12,7 +12,9 @@ const main = React.createClass({
     this.props.dispatch(initialLoad())
   },
   render: function () {
-    let message = this.props.Nav.getIn(['status', 'message'])
+    const {Nav} = this.props;
+    let message = Nav.getIn(['status', 'message'])
+    console.log("current path: ", Nav.getIn(['current', 'path']))
     return (
       <div>
         <header>
@@ -22,9 +24,12 @@ const main = React.createClass({
         <main>
           
           {true ? <ProjectIndex {...this.props} /> : <FileIndex {...this.props} /> }
-          {this.props.Files.getIn(['current', 'path'])
-          ? <Editor files={this.props.Nav.get('current')} {...this.props} /> 
-          : <Intro/>}
+          { 
+          Nav.getIn(['current', 'path'])
+          ? 
+          <Editor resources={Nav.getIn(Nav.getIn(['current', 'keyPath']))} {...this.props} /> 
+          : 
+          <Intro/>}
         </main>
         <footer style={{display: 'none'}}>
           (c) 2016 Satturn File Editor

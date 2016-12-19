@@ -27,6 +27,7 @@ export default connect((state) => state)( class Editor extends React.Component {
     this.throttledSave()
   }
   render() {
+    console.log(this.props.resources.toJS())
     let file = this.props.file.get('path').split('/').pop()
     let extension = (file.split('.').length > 1 ) ? file.split('.').pop() : false;
     let isValid = this.props.file.get('valid')

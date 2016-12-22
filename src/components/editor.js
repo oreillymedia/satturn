@@ -78,11 +78,9 @@ export default connect((state) => state)( class Editor extends React.Component {
                       />)
           case "ormAnnotator":
             // validations here
-            console.log('in annotator')
             let cues = resources.find( (r)=>r.get('ref') == 'cues' )
             let html = resources.find( (r)=>r.get('ref') == 'htmlContent' )
             if (!cues || !html) return (<div> something went wront</div>)
-              console.log(this.props.feature.get('path'))
             return (<div className="st-cue-annotator"> 
                       { <Annotator 
                           key={this.props.feature.get('path')} 

@@ -84,14 +84,15 @@ export function updateFile(path, data, statusExpires = false) {
 export function updateInJsonFile(path, data, objectProp) {
   return (dispatch, getState) => {
     let keyPath = treeUtils.find(getState().Files, node => node.get('path') === path )  
-    if (!keyPath) return
-     try {
-         let fileData = JSON.parse( getState().Files.getIn(keyPath.concat('data')) );
-         data[objectProp] = data;
-         return dispatch({type: "updateFile", path: path, keyPath: keyPath, data: JSON.stringify(data.toJS())})
-     } catch(e) {
-         throw new Error(e); // error in the above string (in this case, yes)!
-     }
+    if (!keyPath) return false
+    try {
+      let fileData = JSON.parse( getState().Files.getIn(keyPath.concat('data')) )
+      fileData[objectProp] = (typeof data == 'string') ? JSON.parse(data) : data;
+      return dispatch({type: "updateFile", path: path, keyPath: keyPath, data: {data: JSON.stringify(fileData, null, 2)} })
+    } catch(e) {
+      console.log(e)
+      throw new Error(e); // error in the above string (in this case, yes)!
+    }
       
     
   

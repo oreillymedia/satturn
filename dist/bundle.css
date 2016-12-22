@@ -1410,8 +1410,24 @@ input[type=checkbox].minimal + label {
 .st-simple-editor-monospaced {
   font-family: Consolas, Menlo, Monaco, "Lucida Console", monospace; }
 
-.st-cue-annotator article.content {
+.st-cue-annotator .top-bar {
+  top: 110px;
+  left: 260px;
+  transition: left 0.25s ease; }
+
+.st-editor-expanded .st-cue-annotator .top-bar {
+  left: 60px; }
+
+.st-cue-annotator .material-icons.material-icons {
+  font-size: 20px;
+  line-height: 0;
   margin-top: 0; }
+
+.st-cue-annotator input[type="checkbox"] + label:before {
+  font-size: 11px; }
+
+.st-cue-annotator .cue-index .cue-marker {
+  font-size: 15px; }
 
 .st-cue-annotator .videoPanel {
   top: 48px; }

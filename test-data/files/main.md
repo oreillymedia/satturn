@@ -4,7 +4,7 @@ A really simple example:
 
 <pre data-code-language="python" data-executable="true" data-type="programlisting">
 hey = "hello world", 38+4
-print(hey)
+print(hey)!
 </pre>
 
 <pre class="output_subarea output_stream output_stdout output_text" data-output="true">

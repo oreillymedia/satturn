@@ -20,16 +20,9 @@
     background-color: $color-background-lighter;
   }
 }
-.tree-view_children {
-  max-height: 200vh;
-  transition: max-height 250ms ease;
-}
-.tree-view_children-collapsed {
-  height: auto;
-  max-height: 0;
-  overflow: hidden;
-}
+
 .st-project-name {
+  white-space: nowrap;
   font-weight: normal;
   font-size: 1.4rem;
   color: rgba(0,0,0,1);
@@ -46,31 +39,20 @@
 .st-project-tree {
   transition: width $transition-timing, opacity $transition-timing,height $transition-timing;
 }
-
-.st-file, .st-folder {
-  padding: .3em;
-} 
-.st-file {
+.st-project-tree-item {
+  white-space: nowrap;
   margin-left: -20em;
-  padding-left: 20em;
+  padding: .25em .25em .25em 20em;
   cursor: default;
   .material-icons {
     float: right;
   }
 }
 
-.st-file-selected {
+
+ 
+.st-project-tree-item-selected {
   background: $color-background-light;
-}
-.tree-view_arrow-collapsed {
-  transform:none;
-}
-.tree-view_arrow:after {
-    font-family: 'Material Icons';
-    content: "folder_open";
-}
-.tree-view_arrow.tree-view_arrow-collapsed:after {
-  content: "folder";
 }
 
 .icon-spinning {

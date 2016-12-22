@@ -14,7 +14,6 @@ const main = React.createClass({
   render: function () {
     const {Nav} = this.props;
     let message = Nav.getIn(['status', 'message'])
-    console.log("current path: ", Nav.getIn(['current', 'path']))
     return (
       <div>
         <header>
@@ -27,7 +26,7 @@ const main = React.createClass({
           { 
           Nav.getIn(['current', 'path'])
           ? 
-          <Editor resources={Nav.getIn(Nav.getIn(['current', 'keyPath']))} {...this.props} /> 
+          <Editor feature={Nav.getIn(Nav.getIn(['current', 'keyPath']))} {...this.props} /> 
           : 
           <Intro/>}
         </main>

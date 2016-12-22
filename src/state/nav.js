@@ -16,22 +16,22 @@ export const INITIAL_STATE = fromJS({
   current: {},
   configFile: "oriole.json",
   index:[
-    {slug: "markdown", name: "Markdown Editor",  editor: "markdown", 
+    {path: "markdown", name: "Markdown Editor",  editor: "markdown", 
       resources: [
-        {type:'urlref', ref:'source'}
+        {type:'urlInProp', ref:'source'}
       ]},
-    {slug: "annotator", name: "Cue Annotator",  editor: "ormAnnotator", 
+    {path: "annotator", name: "Cue Annotator",  editor: "ormAnnotator", 
       resources: [
-        {type:'urlref', ref:'htmlContent'},
-        {type:'ref', ref:'cues'}
+        {type:'prop', ref:'cues'},
+        {type:'urlInProp', ref:'htmlContent'}
       ]},
-    {slug: "oriole-settings", name: "Oriole Settings", editor: "json", 
+    {path: "oriole-settings", name: "Oriole Settings", editor: "json", 
       resources: [
-        {type: 'file', ref: "oriole.json"}
+        {type: 'url', path: "oriole.json"}
       ]},
-    {slug: "atlas-settings", name: "Atlas Settings", editor: "json", 
+    {path: "atlas-settings", name: "Atlas Settings", editor: "json", 
       resources: [
-        {type: 'file', ref:'atlas.json'}
+        {type: 'url', path:'atlas.json'}
       ]},
   ], 
   status: {
@@ -46,15 +46,20 @@ export const INITIAL_STATE = fromJS({
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
     case "setConfig":
+    state = state.set('configKeyPath', action.keyPath)
       return state.set('config', action.config)
     case "setCurrentPath":
-      return state.setIn(['current'], {path: action.path, keyPath: action.keyPath})
+      return state.update('current', (c)=> c.merge({path: action.path, keyPath: action.keyPath}) )
+      return state
     case "selectEditor":
       return state.setIn(action.keyPath.concat('selected'), true )
     case "setSidebarActiveStatus":
       return state.set("sidebarActiveStatus", action.status)
     case "updateStatusBar":
       return state.update('status', (status)=> status.merge({status: action.status, message: action.message, timer: action.timer}))
+    case "updateIndex":
+      state = state.update('index', index=> index.merge(action.index)) 
+      return state
   }
   return state;
 }
@@ -67,23 +72,45 @@ export default function(state = INITIAL_STATE, action) {
 export function initialLoad() { 
   return (dispatch, getState) => {
     dispatch(getTree()).then( ()=> {
-      let configFile = getState().Nav.get('configFile')    
+      let configFile = getState().Nav.get('configFile') 
       dispatch(fetchFile(configFile)).then( ()=>{
         let keyPath = treeUtils.find(getState().Files, node => node.get('path') === configFile )
+        if (!keyPath) throw new Error('no config file at %s', configFile) 
         try {
             let data = getState().Files.getIn(keyPath.concat('data'))
-            let c = JSON.parse(data);
-            dispatch({type: "setConfig", config: fromJS(c) })
-            console.log('Loaded config for %s', getState().Nav.getIn(['config', 'title']) )
+            let c = fromJS(JSON.parse(data));
+            dispatch({type: "setConfig", config: c, keyPath : keyPath  })
         } catch(e) {
             throw new Error(e); // error in the above string (in this case, yes)!
         }
+        dispatch(updateIndex())
         dispatch(watchHistoryChanges())
       })
     })
   }
 }
 
+
+export function updateIndex(){
+  return (dispatch, getState) => {
+    let index = getState().Nav.get('index')
+    let config = getState().Nav.get('config')
+    index = index.map( (feat)=> {
+      return feat.update('resources', (r)=>{ 
+        return r.map((res)=>{
+          if (res.get('type') === 'urlInProp') {
+            return res.set('path', config.get( res.get('ref')))
+          } else if (res.get('type') === 'prop') {
+              return res.set('path', getState().Nav.get('configFile'))
+          }
+          return res
+          
+        })
+      })
+    })
+    return dispatch({type: "updateIndex", index: index })
+  }
+}
 
 export function navigateTo(path) {
   return (dispatch, getState) => {
@@ -94,25 +121,18 @@ export function navigateTo(path) {
     if (currentPath != newPath){
       History.push("/"+newPath)
     }
-    console.log(newPath)
 
-    let key = Nav.get('index').findKey(e=>e.get('slug') == newPath)
+    let key = Nav.get('index').findKey(e=>e.get('path') == newPath)
 
     if(typeof key !== 'undefined') {
 
       let keyPath = Seq.of('index', key )
       
-      Nav.getIn(keyPath.concat('resources')).map( res=>{
-        if (!res.has('ref')) { return }
-        if (res.get('type') === 'file') {
-          console.log('getting file %s', res.has('ref') )
-          dispatch(fetchFile(res.get('ref')))
-        } else if (res.get('type') === 'urlref') {
-          console.log('getting file on %s', res.has('ref') )
-          dispatch(fetchFile(Nav.getIn(['config', res.get('ref')]))) 
+      Nav.getIn(keyPath.concat('resources')).forEach( res=>{
+        if ( ['url', 'urlInProp'].includes( res.get('type') ) ) {
+          dispatch(fetchFile(res.get('path')))
         }
       })
-      
       dispatch({type: "setCurrentPath", path: newPath, keyPath: keyPath})
 
     }
@@ -125,7 +145,6 @@ export function watchHistoryChanges() {
     let pathname = normalizedPath(History.location.pathname)
 
     if (pathname.length){
-      console.log("getting", pathname)
       dispatch(navigateTo(pathname))  
     }
     History.listen((location, action) => {

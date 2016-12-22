@@ -4,7 +4,7 @@ import Json from 'react-json'
 
 export default class JsonEditor extends React.Component {
   onChange(value) {
-    this.props.onChange(JSON.stringify(value))
+    this.props.onChange(JSON.stringify(value, null, 2))
   }
   componentWillUnmount() {
     console.log(this.children)

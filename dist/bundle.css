@@ -223,16 +223,8 @@ footer {
   .st-project-index-collapsed:hover {
     background-color: whitesmoke; }
 
-.tree-view_children {
-  max-height: 200vh;
-  transition: max-height 250ms ease; }
-
-.tree-view_children-collapsed {
-  height: auto;
-  max-height: 0;
-  overflow: hidden; }
-
 .st-project-name {
+  white-space: nowrap;
   font-weight: normal;
   font-size: 1.4rem;
   color: black;
@@ -245,28 +237,16 @@ footer {
 .st-project-tree {
   transition: width 0.25s ease, opacity 0.25s ease, height 0.25s ease; }
 
-.st-file, .st-folder {
-  padding: .3em; }
-
-.st-file {
+.st-project-tree-item {
+  white-space: nowrap;
   margin-left: -20em;
-  padding-left: 20em;
+  padding: .25em .25em .25em 20em;
   cursor: default; }
-  .st-file .material-icons {
+  .st-project-tree-item .material-icons {
     float: right; }
 
-.st-file-selected {
+.st-project-tree-item-selected {
   background: #e6e6e6; }
-
-.tree-view_arrow-collapsed {
-  transform: none; }
-
-.tree-view_arrow:after {
-  font-family: 'Material Icons';
-  content: "folder_open"; }
-
-.tree-view_arrow.tree-view_arrow-collapsed:after {
-  content: "folder"; }
 
 .icon-spinning {
   transform-origin: 50% 50%;

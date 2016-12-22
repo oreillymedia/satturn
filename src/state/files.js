@@ -65,13 +65,13 @@ export function setTree(tree) {
   }
 }
 
-export function updateFile(path, data, expires = false) {
+export function updateFile(path, data, statusExpires = false) {
  return (dispatch, getState) => {
     let {Files} = getState();
     let keyPath = treeUtils.find(Files, node => node.get('path') === path )
     let timer = (keyPath) ? Files.getIn(keyPath.concat('timer')) : null;
     clearTimeout(timer)
-    if (expires){
+    if (statusExpires){
       timer = setTimeout(()=>{
         dispatch({type: "updateFile", path: path, keyPath: keyPath, data: {status: "ok", message: "", timer : timer } })
       }, 5000)  
@@ -81,7 +81,23 @@ export function updateFile(path, data, expires = false) {
  } 
 }
 
-
+export function updateInJsonFile(path, data, objectProp) {
+  return (dispatch, getState) => {
+    let keyPath = treeUtils.find(getState().Files, node => node.get('path') === path )  
+    if (!keyPath) return
+     try {
+         let fileData = JSON.parse( getState().Files.getIn(keyPath.concat('data')) );
+         data[objectProp] = data;
+         return dispatch({type: "updateFile", path: path, keyPath: keyPath, data: JSON.stringify(data.toJS())})
+     } catch(e) {
+         throw new Error(e); // error in the above string (in this case, yes)!
+     }
+      
+    
+  
+  }
+  
+}
 
 
 /*********************************************************************
@@ -113,10 +129,10 @@ export function getTree() {
 }
 
 
-export function fetchFile(pathname) {
+export function fetchFile(path) {
   return (dispatch, getState) => {
-    dispatch(updateFile(pathname, { status:'loading', message:'Loading...' }, false))
-    return fetch(API_HOST + pathname, {
+    dispatch(updateFile(path, { status:'loading', message:'Loading...' }, false))
+    return fetch(API_HOST + path, {
       method: 'GET'
     })
     .then( response => {
@@ -124,13 +140,13 @@ export function fetchFile(pathname) {
       return response.json()
     })
     .then( data => {
-      dispatch(updateFile(pathname, {data: data.content, status:'loaded', message:'', loaded: true}))
-      console.log( "done fetching %s", pathname )
+      dispatch(updateFile(path, {data: data.content, status:'loaded', message:'', loaded: true}))
+      console.log( "done fetching %s", path )
     })
     .catch( (err) => {
       console.log(err)
       if (err.status == 404) {
-        return dispatch(updateFile(pathname, {status:'error', message:'File not found. ' + err.statusText, loaded: false}))
+        return dispatch(updateFile(path, {status:'error', message:'File not found. ' + err.statusText, loaded: false}))
       }
       dispatch(updateStatusBar({status:'error', message:'Server Error'}, true))
       err.text().then( msg => {
@@ -140,12 +156,17 @@ export function fetchFile(pathname) {
   }
 }
 
-export function saveFileToServer(pathname, content) {
+export function saveFileToServer(path) {
   return(dispatch, getState) => {
-    dispatch(updateFile(pathname, { status: 'saving', message: 'Saving File...'}))
+    let keyPath = treeUtils.find(getState().Files, node => node.get('path') === path )
+    if (!keyPath) return false
+
+    dispatch(updateFile(path, { status: 'saving', message: 'Saving File...'}))
+    
+    const content = getState().Files.getIn(keyPath.concat('data'))
     const data = new FormData();
     data.append( "content", content );
-    return fetch(API_HOST + pathname, {
+    return fetch(API_HOST + path, {
       method: 'POST',
       body: data
     })
@@ -154,12 +175,12 @@ export function saveFileToServer(pathname, content) {
       return response.json()
     })
     .then( data => {
-      dispatch(updateFile(pathname, {status: 'saved',  message: 'Saved'}, true))
+      dispatch(updateFile(path, {status: 'saved',  message: 'Saved'}, true))
     })
     .catch( err => {
       console.log(err)
       if (err.status == 404) {
-        dispatch(updateFile(pathname, {status: 'error', message: 'Error saving file'}))
+        dispatch(updateFile(path, {status: 'error', message: 'Error saving file'}))
       }
       err.text().then( msg => {
         console.error(msg)

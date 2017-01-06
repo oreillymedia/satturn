@@ -46,9 +46,9 @@ export const INITIAL_STATE = fromJS({
 *********************************************************************/
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case "setConfig":
-    state = state.set('configKeyPath', action.keyPath)
-      return state.set('config', action.config)
+    case "updateConfig":
+      if (action.keyPath) { state = state.set('configKeyPath', action.keyPath) }
+      return state.update('config', (c)=> (c) ? c.merge(action.config) : action.config )
     case "setCurrentPath":
       return state.update('current', (c)=> c.merge({path: action.path, keyPath: action.keyPath}) )
       return state
@@ -79,8 +79,8 @@ export function initialLoad() {
         if (!keyPath) throw new Error('no config file at %s', configFile) 
         try {
             let data = getState().Files.getIn(keyPath.concat('data'))
-            let c = fromJS(JSON.parse(data));
-            dispatch({type: "setConfig", config: c, keyPath : keyPath  })
+            let config = fromJS(JSON.parse(data));
+            dispatch({type: "updateConfig", config: config, keyPath : keyPath  })
         } catch(e) {
             throw new Error(e); // error in the above string (in this case, yes)!
         }

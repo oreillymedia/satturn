@@ -825,6 +825,13 @@ span.CodeMirror-selectedtext {
 .thebe_controls {
   margin-top: .5em; }
 
+button {
+  border: none !important; }
+
+button[data-inactive="true"] {
+  color: #666666;
+  background-color: #e6e6e6; }
+
 /**
  * Draft v0.9.1
  *

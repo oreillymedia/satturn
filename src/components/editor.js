@@ -13,6 +13,7 @@ import MdEditor from './editors/md-editor'
 import JsonEditor from './editors/json-editor'
 import SimpleEditor from './editors/simple-editor'
 import AnnotatorEditor from './editors/annotator-editor'
+
 import md from '../helpers/md'
 
 export default connect((state) => state)( class Editor extends React.Component {
@@ -53,6 +54,7 @@ export default connect((state) => state)( class Editor extends React.Component {
     }
     this.props.dispatch(setSidebarActiveStatus(false))
     this.throttledSave(path)
+
     // this is a bit hacky but works. on markdown editor it will save the md and also the html file
     if (this.props.feature.get('editor') === 'markdown' ){
       let htmlContent = this.props.feature.get('resources').find( (r)=>r.get('ref') == 'htmlContent' )

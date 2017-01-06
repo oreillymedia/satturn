@@ -20,3 +20,11 @@
 .thebe_controls {
   margin-top: .5em;
 }
+
+button {
+  border: none!important;
+}
+button[data-inactive="true"] {
+  color: $color-text-light;
+  background-color: $color-background-light;
+}

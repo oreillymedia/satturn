@@ -48,8 +48,8 @@ export default class MdEditor extends React.Component {
      return (
         <div>
           <div className="st-thebe-buttons">
-            <button disabled={!this.state.thebeInitialized} onClick={()=>this.refreshPage()}>Live Preview</button>
-            <button disabled={this.state.thebeInitialized} onClick={()=>this.initializeThebe()}>Run Code</button>
+            <button data-inactive={this.state.thebeInitialized} onClick={()=>this.refreshPage()}>Markdown Preview</button>
+            <button data-inactive={!this.state.thebeInitialized} onClick={()=>this.initializeThebe()}>Runnable Code</button>
           </div>
           <Editor
             value={this.state.content}

@@ -67,7 +67,7 @@ export function setTree(tree) {
 
 export function updateFile(path, data, statusExpires = false) {
  return (dispatch, getState) => {
-    let {Files} = getState();
+    let {Files, Nav} = getState();
     let keyPath = treeUtils.find(Files, node => node.get('path') === path )
     let timer = (keyPath) ? Files.getIn(keyPath.concat('timer')) : null;
     clearTimeout(timer)
@@ -93,9 +93,6 @@ export function updateInJsonFile(path, data, objectProp) {
       console.log(e)
       throw new Error(e); // error in the above string (in this case, yes)!
     }
-      
-    
-  
   }
   
 }

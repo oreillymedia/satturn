@@ -26,6 +26,18 @@
     {
       "time": 0,
       "sel": "#Seaborn-Example"
+    },
+    {
+      "time": 0,
+      "sel": "#the-id"
+    },
+    {
+      "time": 68444,
+      "sel": "#another-id"
+    },
+    {
+      "time": 71845,
+      "sel": "#this-example-is-hard"
     }
   ]
 }

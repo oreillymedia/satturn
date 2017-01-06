@@ -6,12 +6,14 @@ hey = "hello world", 38+4
 print(hey hello )!
 </pre>
 <div id="the-id">
-<p>This is a block inside a div with an id the-id and its so cool</p>
+<p>This is a block inside a div with an id the-id and its so cool.</p>
 </div>
 <pre class="output_subarea output_stream output_stdout output_text" data-output="true">
 ('hello world', 42)
 </pre>
+<div id="another-id">
 <h2>More complicated example</h2>
+</div>
 <pre data-code-language="python" data-executable="true" data-type="programlisting">
 x = [1,1]
 for i in range(12):
@@ -22,6 +24,7 @@ print(', '.join(str(y) for y in x))
 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144
 </pre>
 <h2>A Chart</h2>
+<div id="this-example-is-hard">
 <pre data-code-language="python" data-executable="true" data-type="programlisting">
 %matplotlib inline
 import matplotlib.pyplot as plt
@@ -30,6 +33,7 @@ x = np.linspace(0, 3*np.pi, 500)
 plt.plot(x, np.sin(x**2))
 plt.title('A simple chirp');
 </pre>
+</div>
 <h2>Seaborn Example</h2>
 <pre data-code-language="python" data-executable="true" data-type="programlisting">
 from __future__ import print_function, division

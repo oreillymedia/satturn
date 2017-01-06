@@ -1173,13 +1173,15 @@ span.CodeMirror-selectedtext {
     min-width: 150px;
     display: inline-block;
     text-align: left; }
-  .jsonEditor .jsonValue input {
-    border: none;
-    font-size: inherit;
-    font-family: inherit;
-    outline: none;
-    padding: 0;
-    margin: 0; }
+  .jsonEditor .jsonValue {
+    display: inline-block; }
+    .jsonEditor .jsonValue input {
+      border: none;
+      font-size: inherit;
+      font-family: inherit;
+      outline: none;
+      padding: 0;
+      margin: 0; }
 
 .cue-index {
   width: 300px;

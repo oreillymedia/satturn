@@ -9,15 +9,16 @@ print(hey hello )!
 </pre>
      
 ::: #the-id
-This is a block inside a div with an id the-id and its so cool
+This is a block inside a div with an id the-id and its so cool.
 :::
 
- 
 <pre class="output_subarea output_stream output_stdout output_text" data-output="true">
 ('hello world', 42)
 </pre>
 
+::: #another-id
 ## More complicated example
+:::
 
 <pre data-code-language="python" data-executable="true" data-type="programlisting">
 x = [1,1]
@@ -33,6 +34,7 @@ print(', '.join(str(y) for y in x))
 
 ## A Chart
 
+::: this exampl
 <pre data-code-language="python" data-executable="true" data-type="programlisting">
 %matplotlib inline
 import matplotlib.pyplot as plt

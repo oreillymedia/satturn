@@ -18,7 +18,8 @@ export const INITIAL_STATE = fromJS({
   index:[
     {path: "markdown", name: "Markdown Editor",  editor: "markdown", 
       resources: [
-        {type:'urlInProp', ref:'source'}
+        {type:'urlInProp', ref:'source'},
+        {type:'urlInProp', ref:'htmlContent'}
       ]},
     {path: "annotator", name: "Cue Annotator",  editor: "ormAnnotator", 
       resources: [

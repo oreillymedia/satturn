@@ -41,8 +41,12 @@
 .st-cue-annotator {
   .top-bar {
     top: 110px; 
+    padding-top: .5rem;
     left: 260px;
     transition: left $transition-timing;
+  }
+  .extras {
+    padding-top: .5rem;
   }
   .st-editor-expanded & {
     .top-bar {left: 60px}
@@ -58,6 +62,7 @@
   .cue-index .cue-marker {
     font-size: 15px;
   }
+
   article.content {
     // margin-top: 0;
   }

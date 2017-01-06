@@ -5,6 +5,7 @@ import ProjectIndex from './components/project-index'
 import Editor from './components/editor'
 import Intro from './components/intro'
 import {initialLoad} from './state/nav'
+import {treeUtils} from './state/files'
 
 
 const main = React.createClass({
@@ -12,13 +13,15 @@ const main = React.createClass({
     this.props.dispatch(initialLoad())
   },
   render: function () {
-    const {Nav} = this.props;
-    let message = Nav.getIn(['status', 'message'])
+    const {Nav, Files} = this.props;
+    let keyPath = treeUtils.find(Files, node => node.get('message') && node.get('message').length > 3 )
+    let globalMessage = Nav.getIn(['status', 'message'])
+    let fileMessage = (keyPath) ? Files.getIn(keyPath.concat('message')) : null
     return (
       <div>
         <header>
           <h1>Oriole Editor</h1>
-          <div className="st-status">{message}</div>
+          <div className="st-status">{fileMessage} {globalMessage}</div>
         </header>
         <main>
           

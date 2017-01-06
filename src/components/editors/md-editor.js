@@ -1,10 +1,6 @@
 import React from 'react'
 import Editor from 'react-md-editor'
-import commonmark from 'commonmark'
-
-const reader = new commonmark.Parser();
-const writer = new commonmark.HtmlRenderer();
-
+import md from '../../helpers/md'
 
 export default class MdEditor extends React.Component {
 
@@ -45,9 +41,8 @@ export default class MdEditor extends React.Component {
     }
     
   }
-  markdownToHtml(md) {
-    let parsed = reader.parse(md);
-    return writer.render(parsed);
+  markdownToHtml(input) {    
+    return md.render(input);
   }
   render() {
      return (

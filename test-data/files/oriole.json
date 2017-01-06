@@ -6,19 +6,19 @@
   "videoId": "TyimCGEkiUc",
   "cues": [
     {
-      "time": 41877,
+      "time": 96419,
       "text": "Example 1",
       "sel": "#example1",
       "scroll": true
     },
     {
-      "time": 45224,
+      "time": 12411,
       "text": "Example 2",
       "sel": "#example2",
       "scroll": true
     },
     {
-      "time": 30000,
+      "time": 86529,
       "text": "A chart!",
       "sel": "#example3",
       "scroll": true

@@ -1412,8 +1412,12 @@ input[type=checkbox].minimal + label {
 
 .st-cue-annotator .top-bar {
   top: 110px;
+  padding-top: .5rem;
   left: 260px;
   transition: left 0.25s ease; }
+
+.st-cue-annotator .extras {
+  padding-top: .5rem; }
 
 .st-editor-expanded .st-cue-annotator .top-bar {
   left: 60px; }

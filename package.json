@@ -33,7 +33,6 @@
   "dependencies": {
     "@oreillymedia/annotator": "0.0.4",
     "classnames": "^2.2.5",
-    "commonmark": "^0.26.0",
     "draft-js": "^0.9.1",
     "draft-js-export-html": "^0.5.0",
     "draft-js-import-html": "^0.3.0",
@@ -42,6 +41,8 @@
     "immutable-tree": "^0.2.0",
     "immutable-treeutils": "^0.1.5",
     "lodash.throttle": "^4.1.1",
+    "markdown-it": "^8.2.2",
+    "markdown-it-container": "^2.0.0",
     "react": "^15.4.1",
     "react-autosize-textarea": "^0.3.3",
     "react-dom": "^15.3.2",

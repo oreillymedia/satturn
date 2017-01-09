@@ -10,7 +10,16 @@
   float: left;
   padding-right: 2em;
 }
-
+.editor-blocked {
+  pointer-events: none !important;
+}
+.editor-blocker{
+ width: 50%;
+ float: left;
+ padding-right: 2em; 
+ position: absolute;
+ z-index: 1000;
+}
 .st-thebe-buttons {
   float: right;
   margin-bottom: 1em;

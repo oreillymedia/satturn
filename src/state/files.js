@@ -184,6 +184,8 @@ export function saveFileToServer(path) {
       console.log(err)
       if (err.status == 404) {
         dispatch(updateFile(path, {status: 'error', message: 'Error saving file'}))
+      } else {
+        dispatch(updateFile(path, {status: 'error', message: `Server Error:${err}`}))
       }
       err.text().then( msg => {
         console.error(msg)

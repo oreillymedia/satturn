@@ -36,6 +36,7 @@ export default class MdEditor extends React.Component {
     location.reload()
   }
   onChange(value) {
+    console.log( this.state.thebeInitialized ? 'thebe intitialized' : "thebe not initialized")
     if (!this.state.thebeInitialized) {
       this.setState({'content': value})
       this.props.onChange(value)
@@ -48,11 +49,12 @@ export default class MdEditor extends React.Component {
   }
   render() {
      return (
-        <div>
+        <div className={this.state.thebeInitialized ? "editor-blocked" : ""}>
           <div className="st-thebe-buttons">
             <button data-inactive={this.state.thebeInitialized} onClick={()=>this.refreshPage()}>Markdown Preview</button>
-            <button data-inactive={!this.state.thebeInitialized} onClick={()=>this.initializeThebe()}>Runnable Code</button>
+            <button data-inactive={!this.state.thebeInitialized} onClick={()=>this.initializeThebe()}>Runnable Code Cells</button>
           </div>
+          
           <Editor
             value={this.state.content}
             onChange={ (v)=> (this.onChange(v))}

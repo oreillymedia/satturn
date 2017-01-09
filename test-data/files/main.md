@@ -5,19 +5,19 @@ You can write paragraphs
   
 ``` python
 hey = "hello world", 38+4
-print(hey hello )!
+print(hey hello. This is an executable code block  )!
 ```
      
 ::: #the-id
-This is a block bloinside a div with an id the-id and its so cool.
-This is very cool
+This is a block inside a div with an id the-id.
+Very cool. Yes.
 :::
-
-``` python 
-hey = "hello world", 38+4
-print(hey hello )!
+     
 ```
-::: #another-id
+hey = "hello world", 38+4
+print(hey hello. This is a non executable block )!
+```
+::: #another-id 
 ## More complicated example
 :::
 

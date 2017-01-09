@@ -31,7 +31,7 @@
   },
   "homepage": "https://github.com/oreillymedia/satturn#readme",
   "dependencies": {
-    "@oreillymedia/annotator": "0.0.4",
+    "@oreillymedia/annotator": "~0.1.1",
     "classnames": "^2.2.5",
     "draft-js": "^0.9.1",
     "draft-js-export-html": "^0.5.0",

@@ -4,7 +4,7 @@
 import  {fromJS, Map, findKey, keyOf, Seq} from 'immutable'
 
 import History from '../history'
-import {updateStatusBar} from './nav'
+import {updateStatusBar, updateConfig} from './nav'
 
 import TreeUtils from 'immutable-treeutils';
 export const treeUtils = new TreeUtils(Seq.of('tree'), 'id', 'children');
@@ -76,6 +76,10 @@ export function updateFile(path, data, statusExpires = false) {
         dispatch({type: "updateFile", path: path, keyPath: keyPath, data: {status: "ok", message: "", timer : timer } })
       }, 5000)  
     }
+    if (path == Nav.get('configFile')) {
+      dispatch(updateConfig())
+    }
+
     data.timer = timer;
     return dispatch({type: "updateFile", path: path, keyPath: keyPath, data: data})
  } 
@@ -173,6 +177,7 @@ export function saveFileToServer(path) {
       return response.json()
     })
     .then( data => {
+      console.log('saved ', path)
       dispatch(updateFile(path, {status: 'saved',  message: 'Saved'}, true))
     })
     .catch( err => {

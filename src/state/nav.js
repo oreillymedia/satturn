@@ -47,8 +47,9 @@ export const INITIAL_STATE = fromJS({
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
     case "updateConfig":
-      if (action.keyPath) { state = state.set('configKeyPath', action.keyPath) }
-      return state.update('config', (c)=> (c) ? c.merge(action.config) : action.config )
+      return state.update('config', (c)=> {
+        return (c) ? c.merge(action.config) : action.config
+      } )
     case "setCurrentPath":
       return state.update('current', (c)=> c.merge({path: action.path, keyPath: action.keyPath}) )
       return state
@@ -75,15 +76,7 @@ export function initialLoad() {
     dispatch(getTree()).then( ()=> {
       let configFile = getState().Nav.get('configFile') 
       dispatch(fetchFile(configFile)).then( ()=>{
-        let keyPath = treeUtils.find(getState().Files, node => node.get('path') === configFile )
-        if (!keyPath) throw new Error('no config file at %s', configFile) 
-        try {
-            let data = getState().Files.getIn(keyPath.concat('data'))
-            let config = fromJS(JSON.parse(data));
-            dispatch({type: "updateConfig", config: config, keyPath : keyPath  })
-        } catch(e) {
-            throw new Error(e); // error in the above string (in this case, yes)!
-        }
+        dispatch(updateConfig())
         dispatch(updateIndex())
         dispatch(watchHistoryChanges())
       })
@@ -91,6 +84,19 @@ export function initialLoad() {
   }
 }
 
+export function updateConfig(){
+  return (dispatch, getState) => {
+    let configFile = getState().Nav.get('configFile') 
+    let keyPath = treeUtils.find(getState().Files, node => node.get('path') === configFile )
+    if (!keyPath) throw new Error('no config file at %s', configFile) 
+    let data = getState().Files.getIn(keyPath.concat('data'))
+    if (data) {
+      let config = fromJS(JSON.parse(data));
+      dispatch({type: "updateConfig", config: config})  
+    }
+    
+  }
+}
 
 export function updateIndex(){
   return (dispatch, getState) => {

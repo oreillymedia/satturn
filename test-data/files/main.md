@@ -2,14 +2,15 @@
 
 A really simple example:
 You can write paragraphs
- 
+  
 ``` python
 hey = "hello world", 38+4
 print(hey hello )!
 ```
      
 ::: #the-id
-This is a block inside a div with an id the-id and its so cool.
+This is a block bloinside a div with an id the-id and its so cool.
+This is very cool
 :::
 
 ``` python 

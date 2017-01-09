@@ -41,25 +41,32 @@ export default connect((state) => state)( class Editor extends React.Component {
 
   componentWillMount() {
     this.throttledSave = throttle((path)=>{
-      console.log('saving...')
+      console.log('saving %s ...', path)
+      return this.props.dispatch(saveFileToServer(path))
+    }, 1000, {leading: false, trailing: true})
+
+    this.throttledSave2 = throttle((path)=>{
+      console.log('saving %s ...', path)
       return this.props.dispatch(saveFileToServer(path))
     }, 1000, {leading: false, trailing: true})
   }
 
   onChange(path, data, objectProp = false) {
+    this.props.dispatch(setSidebarActiveStatus(false))
+
     if (objectProp) {
       this.props.dispatch(updateInJsonFile(path, data, objectProp))
     } else {
       this.props.dispatch(updateFile(path, {data: data}))  
     }
-    this.props.dispatch(setSidebarActiveStatus(false))
     this.throttledSave(path)
 
-    // this is a bit hacky but works. on markdown editor it will save the md and also the html file
+    // this is a bit hacky but works for now. on markdown editor we will also save the generated html file
     if (this.props.feature.get('editor') === 'markdown' ){
       let htmlContent = this.props.feature.get('resources').find( (r)=>r.get('ref') == 'htmlContent' )
       this.props.dispatch(updateFile(htmlContent.get('path'), {data: md.render(data)}))
-      this.throttledSave(htmlContent.get('path'))
+
+      this.throttledSave2(htmlContent.get('path'))
     }
   }
   render() {

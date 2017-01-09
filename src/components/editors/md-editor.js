@@ -17,15 +17,17 @@ export default class MdEditor extends React.Component {
     }
   }
   initializeThebe() {
-     if (Thebe) {
-      var thebe = new Thebe({
+     if (Thebe) {      
+      let thebe = new Thebe({
         selector:"pre[data-executable]",
         add_interrupt_button: true,
         kernel_name: "python3",
         tmpnb_mode: false,
         url: "http://" + window.location.host,
-        debug: true,
+        debug: false,
       });
+      window.thebe = thebe;
+
       $('.cm-s-default').addClass('cm-s-oreilly').removeClass('cm-s-default')
       this.setState({'thebeInitialized': true})
     }
@@ -34,9 +36,9 @@ export default class MdEditor extends React.Component {
     location.reload()
   }
   onChange(value) {
-    this.setState({'content': value})
-    this.props.onChange(value)
     if (!this.state.thebeInitialized) {
+      this.setState({'content': value})
+      this.props.onChange(value)
       this.setState({'output': this.markdownToHtml(value)});  
     }
     
@@ -53,7 +55,7 @@ export default class MdEditor extends React.Component {
           </div>
           <Editor
             value={this.state.content}
-            onChange={ (v)=> this.onChange(v)}
+            onChange={ (v)=> (this.onChange(v))}
             options={this.CodeMirrorOptions}
             />
         <div className="MDOutput" dangerouslySetInnerHTML={{__html: this.state.output}}/>

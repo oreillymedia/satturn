@@ -20,13 +20,15 @@ export default connect((state) => state)( class Editor extends React.Component {
   
 
   getResourceData(res){
+    let {Files, Nav} = this.props
     if ( ['url', 'urlInProp'].includes( res.get('type') ) ) {
-      let keyPath = treeUtils.find(this.props.Files, node => node.get('path') === res.get('path') )
-      return (keyPath) ? this.props.Files.getIn(keyPath.concat('data')) : false
+      let keyPath = treeUtils.find(Files, node => node.get('path') === res.get('path') )
+      return (keyPath) ? Files.getIn(keyPath.concat('data')) : false
     } else if ( res.get('type') == 'prop' ) {
-      let keyPath = this.props.Nav.get('configKeyPath')
+      let configKeyPath = treeUtils.find(Files, node => node.get('path') === Nav.get('configFile') )
+      if (!configKeyPath) return false
       try {
-          let data = this.props.Files.getIn(keyPath.concat('data'))
+          let data = Files.getIn(configKeyPath.concat('data'))
           let c = JSON.parse(data);
           return JSON.stringify(c[res.get('ref')])
       } catch(e) {

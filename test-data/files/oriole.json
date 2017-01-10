@@ -28,16 +28,20 @@
       "sel": "#Seaborn-Example"
     },
     {
-      "time": 0,
+      "time": 34695,
       "sel": "#the-id"
     },
     {
-      "time": 0,
+      "time": 7838,
       "sel": "#another-id"
     },
     {
       "time": 71845,
       "sel": "#this-example-is-hard"
+    },
+    {
+      "time": 22595,
+      "sel": "#this-example"
     }
   ]
 }

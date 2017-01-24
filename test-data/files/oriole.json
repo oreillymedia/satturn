@@ -1,7 +1,7 @@
 {
   "title": "Oriole Template!!!",
   "source": "main.md",
-  "mode": "markdown",
+  "mode": "ipynb",
   "htmlContent": "main.html",
   "videoId": "TyimCGEkiUc",
   "cues": [

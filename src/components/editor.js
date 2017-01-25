@@ -24,7 +24,8 @@ export default connect((state) => state)( class Editor extends React.Component {
       let keyPath = treeUtils.find(this.props.Files, node => node.get('path') === res.get('path') )
       return (keyPath) ? this.props.Files.getIn(keyPath.concat('data')) : false
     } else if ( res.get('type') == 'prop' ) {
-      let keyPath = this.props.Nav.get('configKeyPath')
+      let keyPath = treeUtils.find(this.props.Files, node => node.get('path') === this.props.Nav.get('configFile') )
+      if (!keyPath) return false;
       try {
           let data = this.props.Files.getIn(keyPath.concat('data'))
           let c = JSON.parse(data);

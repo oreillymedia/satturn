@@ -143,7 +143,7 @@ export function fetchFile(path) {
     })
     .then( data => {
       dispatch(updateFile(path, {data: data.content, status:'loaded', message:'', loaded: true}))
-      console.log( "done fetching %s", path )
+      // console.log( "done fetching %s", path )
     })
     .catch( (err) => {
       console.log(err)
@@ -177,7 +177,7 @@ export function saveFileToServer(path) {
       return response.json()
     })
     .then( data => {
-      console.log('saved ', path)
+      // console.log('saved ', path)
       dispatch(updateFile(path, {status: 'saved',  message: 'Saved'}, true))
     })
     .catch( err => {

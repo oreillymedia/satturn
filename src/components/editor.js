@@ -20,7 +20,6 @@ export default connect((state) => state)( class Editor extends React.Component {
   
 
   getResourceData(res){
-    console.log('getting data for', res.get('path'))
     if ( ['url', 'urlInProp'].includes( res.get('type') ) ) {
       let keyPath = treeUtils.find(this.props.Files, node => node.get('path') === res.get('path') )
       return (keyPath) ? this.props.Files.getIn(keyPath.concat('data')) : false
@@ -32,7 +31,6 @@ export default connect((state) => state)( class Editor extends React.Component {
           let c = JSON.parse(data);
           return JSON.stringify(c[res.get('ref')])
       } catch(e) {
-          console.log('error here!', e)
           throw new Error(e); // error in the above string (in this case, yes)!
       }
     }

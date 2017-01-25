@@ -1,6 +1,6 @@
 {
   "name": "satturn",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A file editor with support for markdown and json",
   "main": "index.js",
   "scripts": {
@@ -14,7 +14,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "api:build": "go build -o ./api/api ./api",
     "api:build:linux": "env GOOS=linux GOARCH=386 go build -o ./api/api-linux ./api",
-    "version" : "npm run build && git add .",
+    "version": "npm run build && git add .",
     "postversion": "git push --follow-tags"
   },
   "repository": {

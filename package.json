@@ -1,6 +1,6 @@
 {
   "name": "satturn",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "A file editor with support for markdown and json",
   "main": "index.js",
   "scripts": {

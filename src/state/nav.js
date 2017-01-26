@@ -142,6 +142,8 @@ export function navigateTo(path) {
       })
       dispatch({type: "setCurrentPath", path: newPath, keyPath: keyPath})
 
+    } else {
+      dispatch({type: "setCurrentPath", path: null})      
     }
   }
 }

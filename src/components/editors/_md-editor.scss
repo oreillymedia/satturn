@@ -10,7 +10,7 @@
   float: left;
   padding-right: 2em;
 }
-.editor-blocked {
+.editor-blocked .MDEditor{
   pointer-events: none !important;
 }
 .editor-blocker{
@@ -30,10 +30,10 @@
   margin-top: .5em;
 }
 
-button {
-  border: none!important;
-}
-button[data-inactive="true"] {
-  color: $color-text-light;
-  background-color: $color-background-light;
+.MDEditor_toolbarButton {
+	color: black!important;
+	margin-right: 8px;
+	border-radius: 0;
+	padding-top: 5px;
+	height: 30px;
 }

@@ -1,7 +1,8 @@
 # A Simple Oriole
 
 A really simple example:
-You can write paragraphs
+
+You can write paragraphs like this.
   
 ``` python
 hey = "hello world", 38+4

@@ -16,8 +16,8 @@ export default connect( (state) => state)( class ProjectIndex extends React.Comp
     })
     return (
       <div onClick={()=> this.onClick()} className={sidebarClasses}>
-        <h2 className="st-project-name" >
-        <i className="material-icons">folder_open</i>&nbsp;{this.props.Nav.getIn(['config','title'])}
+        <h2>
+          <i className="material-icons">folder_open</i>&nbsp;<span className="st-project-name">{this.props.Nav.getIn(['config','title'])}</span>
         </h2>
         <div className="st-project-tree">
           {this.props.Nav.get('index').map( (feat,i)=> <Item key={i} {...feat.toJS()} /> )}

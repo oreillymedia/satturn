@@ -1,6 +1,6 @@
 {
   "name": "satturn",
-  "version": "0.2.1",
+  "version": "0.2.4",
   "description": "A file editor with support for markdown and json",
   "main": "index.js",
   "scripts": {
@@ -13,7 +13,9 @@
     "scss:watch": "npm run scss & npm run scss -- -rw src/styles/",
     "test": "echo \"Error: no test specified\" && exit 1",
     "api:build": "go build -o ./api/api ./api",
-    "api:build:linux": "env GOOS=linux GOARCH=386 go build -o ./api/api-linux ./api"
+    "api:build:linux": "env GOOS=linux GOARCH=386 go build -o ./api/api-linux ./api",
+    "version": "npm run build && git add .",
+    "postversion": "git push --follow-tags"
   },
   "repository": {
     "type": "git",
@@ -50,6 +52,7 @@
     "react-md-editor": "^0.2.2",
     "react-redux": "^4.4.5",
     "react-router": "^2.8.1",
+    "react-treeview": "^0.4.6",
     "redux": "^3.6.0",
     "redux-thunk": "^2.1.0"
   },

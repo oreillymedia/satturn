@@ -20,7 +20,7 @@ const main = React.createClass({
     return (
       <div>
         <header>
-          <h1>Oriole Editor</h1>
+          <h1>Oriole Authoring</h1>
           <div className="st-status">{fileMessage} {globalMessage}</div>
         </header>
         <main>

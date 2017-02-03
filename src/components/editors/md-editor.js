@@ -17,7 +17,8 @@ export default class MdEditor extends React.Component {
     }
   }
   initializeThebe() {
-     if (Thebe) {      
+     if (Thebe) {
+      this.setState({ thebeInitialized : true })
       let thebe = new Thebe({
         selector:"pre[data-executable]",
         add_interrupt_button: true,
@@ -27,16 +28,14 @@ export default class MdEditor extends React.Component {
         debug: false,
       });
       window.thebe = thebe;
-
       $('.cm-s-default').addClass('cm-s-oreilly').removeClass('cm-s-default')
-      this.setState({'thebeInitialized': true})
+      
     }
   }
   refreshPage() {
     location.reload()
   }
   onChange(value) {
-    console.log( this.state.thebeInitialized ? 'thebe intitialized' : "thebe not initialized")
     if (!this.state.thebeInitialized) {
       this.setState({'content': value})
       this.props.onChange(value)
@@ -48,11 +47,13 @@ export default class MdEditor extends React.Component {
     return md.render(input);
   }
   render() {
-     return (
-        <div className={this.state.thebeInitialized ? "editor-blocked" : ""}>
+    let {thebeInitialized} = this.state
+
+      return (
+        <div className={ thebeInitialized ? "editor-blocked" : null}>
           <div className="st-thebe-buttons">
-            <button data-inactive={this.state.thebeInitialized} onClick={()=>this.refreshPage()}>Markdown Preview</button>
-            <button data-inactive={!this.state.thebeInitialized} onClick={()=>this.initializeThebe()}>Runnable Code Cells</button>
+            <button data-inactive={thebeInitialized ? true : null} onClick={()=>this.refreshPage()}>Markdown Preview</button>
+            <button data-inactive={!thebeInitialized ? true : null} onClick={()=>this.initializeThebe()}>Runnable Code Cells</button>
           </div>
           
           <Editor

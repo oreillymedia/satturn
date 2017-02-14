@@ -48,22 +48,15 @@ func main() {
 	r.HandleFunc("/api/{path:.*}", WritePathToFile).Methods("POST")
 	r.PathPrefix("/files/").Handler(http.StripPrefix("/files/", http.FileServer(http.Dir(root))))
 
-	// this needs to use fs
-	// r.PathPrefix("/").Handler(http.FileServer(http.Dir(approot)))
+	// Serve the index from assetsFS
 	r.HandleFunc("/", HTTPServeIndex).Methods("GET")
+	// serve the other files from assets FS
 	r.PathPrefix("/").Handler(http.FileServer(assetFS()))
 
 	n := negroni.Classic()
 	n.UseHandler(r)
 
 	n.Run(":" + port)
-}
-
-func HTTPServeIndex(w http.ResponseWriter, r *http.Request) {
-	// cookie := http.Cookie{Name: env.SessionSecret, Value: env.SessionSecret}
-	// http.SetCookie(w, &cookie)
-	index, _ := DistIndexHtml()
-	fmt.Fprintf(w, string(index.bytes))
 }
 
 func PathToItem(readPath string, level int) *Item {

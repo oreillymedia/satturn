@@ -4,16 +4,24 @@
   "description": "A file editor with support for markdown and json",
   "main": "index.js",
   "scripts": {
-    "start": "ROOT=./test-data/files/ PORT=8001 APPROOT=./ bash -c './api/api'",
+    "start": "cd backend; ROOT=./test-data/files/ PORT=8001 APPROOT=./dist/ gin",
     "develop": "npm run watch & npm run start",
     "watch": "npm run scss:watch & npm run watchify",
     "watchify": "watchify -o dist/bundle.js src/index.js -dv",
-    "build": "npm run api:build & npm run api:build:linux & npm run scss -- --output-style compressed & browserify src/index.js | uglifyjs > dist/bundle.js",
+    "build": "npm run api:build && npm run scss -- --output-style compressed && browserify src/index.js | uglifyjs > dist/bundle.js",
+    
     "scss": "node-sass src/styles/bundle.scss -o dist/",
     "scss:watch": "npm run scss & npm run scss -- -rw src/styles/",
+    
     "test": "echo \"Error: no test specified\" && exit 1",
-    "api:build": "go build -o ./api/api ./api",
+    
+    "api:build": "npm run api:build:this && npm run api:build:linux",
+    "api:build:this": "go build -o ./api/api ./api",
     "api:build:linux": "env GOOS=linux GOARCH=386 go build -o ./api/api-linux ./api",
+    
+    "bindata": "cd backend;go-bindata-assetfs ../dist/...",
+    "bindata:dev": "cd backend;go-bindata-assetfs -debug ../dist/...",
+    
     "version": "npm run build && git add .",
     "postversion": "git push --follow-tags"
   },

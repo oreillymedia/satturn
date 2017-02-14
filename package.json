@@ -4,7 +4,7 @@
   "description": "A file editor with support for markdown and json",
   "main": "index.js",
   "scripts": {
-    "start": "cd backend; gin",
+    "start": "npm run bindata:dev && cd backend; gin",
     "develop": "npm run watch & npm run start",
     "watch": "npm run scss:watch & npm run watchify",
     "watchify": "watchify -o dist/bundle.js src/index.js -dv",

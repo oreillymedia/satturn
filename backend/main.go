@@ -50,12 +50,20 @@ func main() {
 
 	// this needs to use fs
 	// r.PathPrefix("/").Handler(http.FileServer(http.Dir(approot)))
+	r.HandleFunc("/", HTTPServeIndex).Methods("GET")
 	r.PathPrefix("/").Handler(http.FileServer(assetFS()))
 
 	n := negroni.Classic()
 	n.UseHandler(r)
 
 	n.Run(":" + port)
+}
+
+func HTTPServeIndex(w http.ResponseWriter, r *http.Request) {
+	// cookie := http.Cookie{Name: env.SessionSecret, Value: env.SessionSecret}
+	// http.SetCookie(w, &cookie)
+	index, _ := DistIndexHtml()
+	fmt.Fprintf(w, string(index.bytes))
 }
 
 func PathToItem(readPath string, level int) *Item {

@@ -6,7 +6,7 @@ You can write paragraphs like this.
   
 ``` python
 hey = "hello world", 38+4
-print(hey hello. This is an executable code block  )!
+print(hey hello. This is an executable code block )!
 ```
      
 ::: #the-id

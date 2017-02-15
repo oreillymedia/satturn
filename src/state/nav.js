@@ -15,6 +15,7 @@ export const INITIAL_STATE = fromJS({
   sidebarActiveStatus: true,
   current: {},
   configFile: "oriole.json",
+  name: "Oriole Editor",
   index:[
     {path: "markdown", name: "Markdown Editor",  editor: "markdown", 
       resources: [
@@ -129,6 +130,7 @@ export function navigateTo(path) {
     let currentPath = normalizedPath(History.location.pathname)
     let newPath = normalizedPath(path)
     if (currentPath != newPath){
+      document.title = Nav.get('name') + " - " + newPath
       History.push("/"+newPath)
     }
 
@@ -155,7 +157,7 @@ export function watchHistoryChanges() {
   return (dispatch, getState) => {
     // First let's load the current path
     let pathname = normalizedPath(History.location.pathname)
-
+    document.title = Nav.get('name')
     if (pathname.length){
       dispatch(navigateTo(pathname))  
     }

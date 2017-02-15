@@ -1,6 +1,6 @@
 {
   "name": "satturn",
-  "version": "0.2.4",
+  "version": "0.3.0",
   "description": "A file editor with support for markdown and json",
   "main": "index.js",
   "scripts": {
@@ -9,19 +9,14 @@
     "watch": "npm run scss:watch & npm run watchify",
     "watchify": "watchify -o app/bundle.js src/index.js -dv",
     "build": "npm run scss -- --output-style compressed && browserify src/index.js | uglifyjs > app/bundle.js && npm run backend:build",
-    
     "scss": "node-sass src/styles/bundle.scss -o app/",
     "scss:watch": "npm run scss & npm run scss -- -rw src/styles/",
-    
     "test": "echo \"Error: no test specified\" && exit 1",
-    
     "backend:build": "npm run bindata && npm run backend:build:this && npm run backend:build:linux",
     "backend:build:this": "go build -o ./backend/server ./backend",
     "backend:build:linux": "env GOOS=linux GOARCH=386 go build -o ./backend/server-linux ./backend",
-    
     "bindata": "cd backend;go-bindata-assetfs ../app/...",
     "bindata:dev": "cd backend;go-bindata-assetfs -debug ../app/...",
-    
     "version": "npm run build && git add .",
     "postversion": "git push --follow-tags"
   },

@@ -26,11 +26,11 @@ There's probably no need to make changes to it but the standard building scripts
 - install go
 - place this folder in the GOPATH folder structure convention ($GOPATH/src/github.com/oreillymedia/satturn)
 - go to the api subfolder and install the dependencies with `go get`
-- To build `npm run api:build` for your machine or `npm run api:build:linux` for targeting linux servers.
+- To build `npm run api:build` will create a binary for your machine and another one targeting linux servers.
 
 # Building and versioning
 
-We're using npm's scripts and versioning tools and semantic versioning (see npm guidelines)[https://docs.npmjs.com/getting-started/semantic-versioning]
+We're using npm's scripts and versioning tools.
 
 This script builds everything and pushes a tag to github.
 
@@ -40,4 +40,9 @@ This can be used to clone just the desired version of the package:
 
 `git clone --branch v0.2.3 --depth 1 https://github.com/oreillymedia/satturn.git /your/destination/path/`
 
+This produces two self contained binaries. You don't need anything else to run the app.
+
+`backend/server` (for your machine)
+
+`backend/server-linux` (for linux machines)
 

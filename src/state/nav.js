@@ -88,7 +88,10 @@ export function updateConfig(){
   return (dispatch, getState) => {
     let configFile = getState().Nav.get('configFile') 
     let keyPath = treeUtils.find(getState().Files, node => node.get('path') === configFile )
-    if (!keyPath) throw new Error('no config file at %s', configFile) 
+    if (!keyPath){
+      dispatch(updateStatusBar({message: "File '"+configFile+"' not found!"}, false))
+      throw new Error('Config File Missing. No file matching ' + configFile) 
+    }
     let data = getState().Files.getIn(keyPath.concat('data'))
     if (data) {
       let config = fromJS(JSON.parse(data));

@@ -13,7 +13,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-var root string = GetAppDir() + "/test-data/files/"
+var root string = GetAppDir()
 var approot string = GetAppDir()
 
 type Item struct {
@@ -39,10 +39,7 @@ func main() {
 	if newRoot != "" {
 		root = newRoot
 	}
-	newApproot := os.Getenv("APPROOT")
-	if newApproot != "" {
-		approot = newApproot
-	}
+
 	r := mux.NewRouter()
 	r.HandleFunc("/api/{path:.*}", ReadPath).Methods("GET")
 	r.HandleFunc("/api/{path:.*}", WritePathToFile).Methods("POST")

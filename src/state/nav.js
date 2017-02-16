@@ -4,43 +4,27 @@
 import {Seq, fromJS, Map} from 'immutable'
 import createHistory from 'history/createHashHistory' 
 import {getTree, fetchFile, treeUtils} from './files'
-import {store} from '../'
+import config from '../config'
 
 export const History = createHistory()
 
 /*********************************************************************
 ||  Define the state tree
 *********************************************************************/
-export const INITIAL_STATE = fromJS({
+const defaults = {
   sidebarActiveStatus: true,
-  current: {},
-  configFile: "oriole.json",
-  name: "Oriole Editor",
-  index:[
-    {path: "markdown", name: "Markdown Editor",  editor: "markdown", 
-      resources: [
-        {type:'urlInProp', ref:'source'},
-        {type:'urlInProp', ref:'htmlContent'}
-      ]},
-    {path: "annotator", name: "Cue Annotator",  editor: "ormAnnotator", 
-      resources: [
-        {type:'prop', ref:'cues'},
-        {type:'urlInProp', ref:'htmlContent'}
-      ]},
-    {path: "oriole-settings", name: "Oriole Settings", editor: "json", 
-      resources: [
-        {type: 'url', path: "oriole.json"}
-      ]},
-    {path: "atlas-settings", name: "Atlas Settings", editor: "json", 
-      resources: [
-        {type: 'url', path:'atlas.json'}
-      ]},
-  ], 
+  current: {},  
   status: {
     status: 'ok',
     message: ''
-  },
-})
+  }
+}
+let appKey = process.env.APP ? process.env.APP : "";
+appKey = config.hasOwnProperty(appKey) ? appKey : "oriole"
+// console.log("app is %s", appKey)
+const appConfig = config[appKey]
+
+export const INITIAL_STATE = fromJS(Object.assign(defaults, appConfig))
 
 /*********************************************************************
 ||  The reducer
@@ -130,7 +114,6 @@ export function navigateTo(path) {
     let currentPath = normalizedPath(History.location.pathname)
     let newPath = normalizedPath(path)
     if (currentPath != newPath){
-      document.title = Nav.get('name') + " - " + newPath
       History.push("/"+newPath)
     }
 
@@ -155,14 +138,19 @@ export function navigateTo(path) {
 
 export function watchHistoryChanges() {
   return (dispatch, getState) => {
+    let {Nav} = getState();
+      
     // First let's load the current path
     let pathname = normalizedPath(History.location.pathname)
     document.title = Nav.get('name')
     if (pathname.length){
       dispatch(navigateTo(pathname))  
+    } else if (Nav.get('defaultPath')) {
+      dispatch(navigateTo(Nav.get('defaultPath')))  
     }
     History.listen((location, action) => {
       let pathname = normalizedPath(location.pathname)
+      document.title = Nav.get('name') + " - " + pathname
       return dispatch(navigateTo(pathname))
     })    
   }

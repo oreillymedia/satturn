@@ -31,7 +31,7 @@ const main = React.createClass({
           ? 
           <Editor feature={Nav.getIn(Nav.getIn(['current', 'keyPath']))} {...this.props} /> 
           : 
-          <Intro/>}
+          <Intro name={Nav.get('name')} message={Nav.get('message')}/>}
         </main>
         <footer style={{display: 'none'}}>
           (c) 2016 Satturn File Editor

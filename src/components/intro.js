@@ -6,9 +6,8 @@ export default class Intro extends React.Component {
   render() {
     return (
       <div className="st-intro">
-        <h1>Welcome to the Oriole Authoring tool</h1>
-        <p>Choose an editor from the menu on the left to <br/>adjust settings or edit the content.</p>
-        <p>All changes will be saved automatically.</p>
+        <h1>Welcome to {this.props.name}</h1>
+        <div dangerouslySetInnerHTML={{__html : this.props.message}} />
       </div>
     );
   }

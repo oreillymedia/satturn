@@ -1,8 +1,12 @@
 let config = {
 oriole: {
-  configFile: "oriole.json",
   name: "Oriole Editor",
   message: "<p>Choose an editor from the menu on the left to <br/>adjust settings or edit the content.</p><p>All changes will be saved automatically.</p>",
+  configFile: "oriole.json",
+  configPath: "oriole-settings",
+  defaultConfig: {
+
+  },
   index:[
     {path: "markdown", name: "Markdown Editor",  editor: "markdown", 
       resources: [
@@ -25,9 +29,13 @@ oriole: {
   ], 
 },
 atlas : {
-  configFile: "atlas.json",
-  defaultPath: "atlas-settings",
   name: "Atlas Settings Editor",
+  configFile: "atlas.json",
+  configPath: "atlas-settings",
+  defaultPath: "atlas-settings",
+  defaultConfig: {
+
+  },
   message: "<p>Click on Atlas Settings on the left to edit atlas.json.</p><p>All changes will be saved automatically.</p>",
   index:[
     {path: "atlas-settings", name: "Atlas Settings", editor: "json", 

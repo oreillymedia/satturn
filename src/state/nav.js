@@ -3,7 +3,7 @@
 *********************************************************************/
 import {Seq, fromJS, Map} from 'immutable'
 import createHistory from 'history/createHashHistory' 
-import {getTree, fetchFile, treeUtils} from './files'
+import {getTree, fetchFile, treeUtils, updateFile} from './files'
 import config from '../config'
 
 export const History = createHistory()
@@ -58,14 +58,32 @@ export default function(state = INITIAL_STATE, action) {
 
 export function initialLoad() { 
   return (dispatch, getState) => {
+    let {Nav, Files} = getState()
     dispatch(getTree()).then( ()=> {
-      let configFile = getState().Nav.get('configFile') 
-      dispatch(fetchFile(configFile)).then( ()=>{
-        dispatch(updateConfig())
+      let configFile = Nav.get('configFile') 
+      let keyPath = treeUtils.find(Files, node => node.get('path') === configFile )
+      if (keyPath){
+        dispatch(fetchFile(configFile)).then( ()=>{
+          dispatch(updateConfig())
+          dispatch(updateIndex())
+          dispatch(watchHistoryChanges())
+        })
+      } else {
+        dispatch(loadConfigTemplate())
+        dispatch(navigateTo(Nav.get('configPath') ))  
         dispatch(updateIndex())
         dispatch(watchHistoryChanges())
-      })
+      }
     })
+  }
+}
+
+export function loadConfigTemplate(){
+  return (dispatch, getState) => {
+    let configFilePath = getState().Nav.get('configFile') 
+    let configTemplate = getState().Nav.get('defaultConfig') || {}
+
+    return dispatch(updateFile(configFilePath, {data: configTemplate } ))
   }
 }
 
@@ -80,9 +98,8 @@ export function updateConfig(){
     let data = getState().Files.getIn(keyPath.concat('data'))
     if (data) {
       let config = fromJS(JSON.parse(data));
-      dispatch({type: "updateConfig", config: config})  
-    }
-    
+      return dispatch({type: "updateConfig", config: config})  
+    } 
   }
 }
 

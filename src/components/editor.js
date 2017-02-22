@@ -4,7 +4,7 @@ import TreeView from 'react-treeview'
 import classnames from 'classnames'
 import throttle from 'lodash.throttle'
 
-import {updateFile, saveFileToServer, updateInJsonFile, treeUtils} from '../state/files'
+import {updateFile, saveFileToServer, treeUtils} from '../state/files'
 import {setSidebarActiveStatus} from '../state/nav'
 
 import Intro from './intro'
@@ -55,18 +55,14 @@ export default connect((state) => state)( class Editor extends React.Component {
 
   onChange(path, content, objectProp = false) {
     this.props.dispatch(setSidebarActiveStatus(false))
-
-    if (objectProp) {
-      this.props.dispatch(updateInJsonFile(path, content, objectProp))
-    } else {
-      this.props.dispatch(updateFile(path, {content: content, objectProp: objectProp}))  
-    }
+    console.log('changed:', path, content, objectProp)
+    this.props.dispatch(updateFile(path, {content: content, objectProp: objectProp}))  
     this.throttledSave(path)
 
     // this is a bit hacky but works for now. on markdown editor we will also save the generated html file
     if (this.props.feature.get('editor') === 'markdown' ){
       let htmlContent = this.props.feature.get('resources').find( (r)=>r.get('ref') == 'htmlContent' )
-      this.props.dispatch(updateFile(htmlContent.get('path'), {data: md.render(content)}))
+      this.props.dispatch(updateFile(htmlContent.get('path'), {content: md.render(content)}))
 
       this.throttledSave2(htmlContent.get('path'))
     }

@@ -65,23 +65,30 @@ export function updateFile(path, data, statusExpires = false) {
       dispatch(updateConfig(data.content))
     }
     if (data.content) {
-
+      // here we should be able to trigger a throttled saveFileToServer
     }
-    return dispatch({type: "updateFile", path: path, keyPath: keyPath, data: data})
- } 
+    if (data.objectProp){
+      console.log('has objectProp', data.objectProp)
+      return dispatch(updatePropInJsonFile(path, keyPath, data))
+    } else {
+      console.log('updating', path)
+      return dispatch({type: "updateFile", path: path, keyPath: keyPath, data: data})    
+    }
+    
+  }
 }
 
-export function updateInJsonFile(path, data, objectProp) {
+export function updatePropInJsonFile(path, keyPath, data) {
   return (dispatch, getState) => {
-    let keyPath = treeUtils.find(getState().Files, node => node.get('path') === path )  
-    if (!keyPath) return false
     try {
-      let fileData = JSON.parse( getState().Files.getIn(keyPath.concat('data')) )
-      fileData[objectProp] = (typeof data == 'string') ? JSON.parse(data) : data;
-      return dispatch({type: "updateFile", path: path, keyPath: keyPath, data: {data: JSON.stringify(fileData, null, 2)} })
+      let fileContent = JSON.parse( getState().Files.getIn(keyPath.concat('content')) )
+      fileContent[data.objectProp] = (typeof data.content == 'string') ? JSON.parse(data.content) : data.content;
+      console.log(path, fileContent)
+      data.content = JSON.stringify(fileContent, null, 2)
+      delete data.objectProp
+      return dispatch({type: "updateFile", path: path, keyPath: keyPath, data: data })
     } catch(e) {
-      console.log(e)
-      throw new Error(e); // error in the above string (in this case, yes)!
+      throw new Error(e);
     }
   }
   

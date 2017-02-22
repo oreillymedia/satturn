@@ -105,7 +105,7 @@ func WritePathToFile(w http.ResponseWriter, req *http.Request) {
 	fileMode := os.FileMode(0644)
 	content := req.FormValue("content")
 	stat, err := os.Stat(filePath)
-	if err != nil {
+	if os.IsNotExist(err) {
 		res.Status = "file created"
 		res.StatusCode = 201
 	} else {

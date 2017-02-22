@@ -45,7 +45,6 @@
     "draft-js-import-html": "^0.3.0",
     "history": "^4.3.0",
     "immutable": "^3.8.1",
-    "immutable-tree": "^0.2.0",
     "immutable-treeutils": "^0.1.5",
     "lodash.throttle": "^4.1.1",
     "markdown-it": "^8.2.2",

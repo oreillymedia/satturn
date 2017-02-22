@@ -29,6 +29,10 @@
 .thebe_controls {
   margin-top: .5em;
 }
+.MDEditor_toolbar {
+  background: $color-background-lighter;
+  box-shadow: 0 1px 2px 0px $color-background-light;
+}
 
 .MDEditor_toolbarButton {
 	color: black!important;

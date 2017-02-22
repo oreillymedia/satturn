@@ -3,7 +3,7 @@
 *********************************************************************/
 import {Seq, fromJS, Map} from 'immutable'
 import createHistory from 'history/createHashHistory' 
-import {getTree, fetchFile, treeUtils, updateFile} from './files'
+import {getTree, treeUtils, getFile} from './files'
 import config from '../config'
 
 export const History = createHistory()
@@ -13,13 +13,14 @@ export const History = createHistory()
 *********************************************************************/
 const defaults = {
   sidebarActiveStatus: true,
+  config: {},
   current: {},  
   status: {
     status: 'ok',
     message: ''
   }
 }
-let appKey = process.env.APP ? process.env.APP : "";
+let appKey = process.env.APP;
 appKey = config.hasOwnProperty(appKey) ? appKey : "oriole"
 // console.log("app is %s", appKey)
 const appConfig = config[appKey]
@@ -32,9 +33,8 @@ export const INITIAL_STATE = fromJS(Object.assign(defaults, appConfig))
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
     case "updateConfig":
-      return state.update('config', (c)=> {
-        return (c) ? c.merge(action.config) : action.config
-      } )
+      state = state.update( 'config', (c)=> c.merge(action.config) )
+      return state
     case "setCurrentPath":
       return state.update('current', (c)=> c.merge({path: action.path, keyPath: action.keyPath}) )
       return state
@@ -58,36 +58,25 @@ export default function(state = INITIAL_STATE, action) {
 
 export function initialLoad() { 
   return (dispatch, getState) => {
-    let {Nav, Files} = getState()
     dispatch(getTree()).then( ()=> {
-      let configFile = Nav.get('configFile') 
-      let keyPath = treeUtils.find(Files, node => node.get('path') === configFile )
-      if (keyPath){
-        dispatch(fetchFile(configFile)).then( ()=>{
-          dispatch(updateConfig())
+        dispatch(loadConfig()).then( (a)=>{
           dispatch(updateIndex())
-          dispatch(watchHistoryChanges())
+          dispatch(watchHistoryChanges())  
         })
-      } else {
-        dispatch(loadConfigTemplate())
-        dispatch(navigateTo(Nav.get('configPath') ))  
-        dispatch(updateIndex())
-        dispatch(watchHistoryChanges())
-      }
+        
     })
   }
 }
 
-export function loadConfigTemplate(){
+export function loadConfig(){
   return (dispatch, getState) => {
-    let configFilePath = getState().Nav.get('configFile') 
-    let configTemplate = getState().Nav.get('defaultConfig') || {}
-
-    return dispatch(updateFile(configFilePath, {data: configTemplate } ))
+    let path = getState().Nav.get('configFile')
+    let template = getState().Nav.get('defaultConfig').toJS() || {}
+    return dispatch(getFile(path, JSON.stringify(template)))
   }
 }
 
-export function updateConfig(){
+export function updateConfig(content){
   return (dispatch, getState) => {
     let configFile = getState().Nav.get('configFile') 
     let keyPath = treeUtils.find(getState().Files, node => node.get('path') === configFile )
@@ -95,9 +84,9 @@ export function updateConfig(){
       dispatch(updateStatusBar({message: "File '"+configFile+"' not found!"}, false))
       throw new Error('Config File Missing. No file matching ' + configFile) 
     }
-    let data = getState().Files.getIn(keyPath.concat('data'))
-    if (data) {
-      let config = fromJS(JSON.parse(data));
+    // let content = getState().Files.getIn(keyPath.concat('content'))
+    if (content) {
+      let config = fromJS(JSON.parse(content));
       return dispatch({type: "updateConfig", config: config})  
     } 
   }
@@ -142,7 +131,7 @@ export function navigateTo(path) {
       
       Nav.getIn(keyPath.concat('resources')).forEach( res=>{
         if ( ['url', 'urlInProp'].includes( res.get('type') ) ) {
-          dispatch(fetchFile(res.get('path')))
+          dispatch(getFile(res.get('path')))
         }
       })
       dispatch({type: "setCurrentPath", path: newPath, keyPath: keyPath})
@@ -192,6 +181,8 @@ export function updateStatusBar(status, expires = true){
   }
 }
 
+
+// HELPERS
 
 export function normalizedPath(path){
   if (/^\//.test(path)) {

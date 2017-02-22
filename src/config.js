@@ -5,7 +5,12 @@ oriole: {
   configFile: "oriole.json",
   configPath: "oriole-settings",
   defaultConfig: {
-
+    "title": "Name",
+    "source": "main.md",
+    "mode": "markdown",
+    "htmlContent": "main.html",
+    "videoId": "",
+    "cues": []
   },
   index:[
     {path: "markdown", name: "Markdown Editor",  editor: "markdown", 

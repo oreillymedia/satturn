@@ -636,8 +636,8 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {
   position: relative;
   overflow: visible;
   -webkit-tap-highlight-color: transparent;
-  -webkit-font-variant-ligatures: none;
-  font-variant-ligatures: none; }
+  -webkit-font-variant-ligatures: contextual;
+  font-variant-ligatures: contextual; }
 
 .CodeMirror-wrap pre {
   word-wrap: break-word;
@@ -765,6 +765,9 @@ span.CodeMirror-selectedtext {
 .cm-s-satturn.CodeMirror .CodeMirror-cursor {
   border-left: 1px solid #000 !important; }
 
+.cm-s-satturn.CodeMirror .CodeMirror-scroll {
+  min-height: 400px; }
+
 .cm-s-satturn.CodeMirror span.cm-property, .cm-s-satturn.CodeMirror span.cm-attribute {
   color: #000; }
 
@@ -834,6 +837,10 @@ span.CodeMirror-selectedtext {
 
 .thebe_controls {
   margin-top: .5em; }
+
+.MDEditor_toolbar {
+  background: whitesmoke;
+  box-shadow: 0 1px 2px 0px #e6e6e6; }
 
 .MDEditor_toolbarButton {
   color: black !important;

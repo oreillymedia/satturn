@@ -36,8 +36,16 @@
 
 .MDEditor_toolbarButton {
 	color: black!important;
-	margin-right: 8px;
+  width: auto;
+	margin-right: 5px;
 	border-radius: 0;
-	padding-top: 5px;
-	height: 30px;
+	padding: 5px 5px 10px 5px;
+	height: 25px;
+  .MDEditor_toolbarButton_label-icon {
+    font-size: 14px;  
+  }
+  .MDEditor_toolbarButton_icon > svg {
+    width: 14px;
+    height: 14px;
+  }
 }

@@ -1,13 +1,1 @@
-{
-  "title": "Name",
-  "source": "main.md",
-  "mode": "markdown",
-  "htmlContent": "main.html",
-  "videoId": "",
-  "cues": [
-    {
-      "time": 0,
-      "sel": "#id-nono"
-    }
-  ]
-}
+{"title":"Name","source":"main.md","mode":"markdown","htmlContent":"main.html","videoId":"","cues":[]}

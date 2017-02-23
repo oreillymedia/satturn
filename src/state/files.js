@@ -177,13 +177,9 @@ export function createFileInServer(path, content) {
       return response.json()
     })
     .then( data => {
-      console.log('file created')
       return dispatch(getTree()).then( response =>{
-        console.log('got new tree')
-        dispatch(updateFile(path, {status: 'created',  message: path + ' created', content: content}, true))
-        console.log('created', path)
+        return dispatch(updateFile(path, {status: 'created',  message: path + ' created', content: content}, true))
       })
-      
     })
     .catch( err => {
       console.log(err)

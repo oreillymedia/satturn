@@ -844,10 +844,16 @@ span.CodeMirror-selectedtext {
 
 .MDEditor_toolbarButton {
   color: black !important;
-  margin-right: 8px;
+  width: auto;
+  margin-right: 5px;
   border-radius: 0;
-  padding-top: 5px;
-  height: 30px; }
+  padding: 5px 5px 10px 5px;
+  height: 25px; }
+  .MDEditor_toolbarButton .MDEditor_toolbarButton_label-icon {
+    font-size: 14px; }
+  .MDEditor_toolbarButton .MDEditor_toolbarButton_icon > svg {
+    width: 14px;
+    height: 14px; }
 
 /**
  * Draft v0.9.1
@@ -1443,6 +1449,14 @@ input[type=checkbox].minimal + label {
 
 .st-simple-editor-monospaced {
   font-family: Consolas, Menlo, Monaco, "Lucida Console", monospace; }
+
+.st-cue-annotator .banner {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  max-width: 60%;
+  border: 1px solid #737373;
+  padding: 3px 10px; }
 
 .st-cue-annotator .top-bar {
   top: 110px;

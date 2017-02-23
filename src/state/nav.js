@@ -105,7 +105,6 @@ export function updateIndex(){
               return res.set('path', getState().Nav.get('configFile'))
           }
           return res
-          
         })
       })
     })

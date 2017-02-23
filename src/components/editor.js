@@ -52,7 +52,14 @@ export default connect((state) => state)( class Editor extends React.Component {
       return this.props.dispatch(saveFileToServer(path))
     }, 1000, {leading: false, trailing: true})
   }
-
+  shouldComponentUpdate(nextProps, nextState){
+    return true;
+    let resources = this.props.feature.get('resources')
+    let shouldUpdate = false;
+    let loaded = resources.forEach( res=> {
+      return res.has('path') ? this.didFileLoad(res.get('path')) : false
+    })
+  }
   onChange(path, content, objectProp = false) {
     this.props.dispatch(setSidebarActiveStatus(false))
     console.log('changed:', path, content, objectProp)
@@ -81,6 +88,7 @@ export default connect((state) => state)( class Editor extends React.Component {
                       key={this.props.feature.get('path')} 
                       content={this.getResourceData(resources.first())}
                       onChange={ (content)=> this.onChange(resources.first().get('path'), content)}
+                      settings={this.props.feature.get('settings') ? this.props.feature.get('settings').toJS() : {} } 
                       />)
           case "markdown":
             if (this.props.Nav.getIn(['config', 'mode'] ) !== "markdown"  ) {

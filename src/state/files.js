@@ -18,8 +18,6 @@ export const INITIAL_STATE = fromJS({
   tree: {},
 })
 
-
-
 /*********************************************************************
 ||  The reducer
 *********************************************************************/
@@ -111,7 +109,7 @@ export function getTree() {
       let tree = fromJS(json);
       // directories first
       tree = tree.update('children', (c)=> c.sort((a,b)=> a.get('type').localeCompare(b.get('type'))))
-      dispatch(setTree(tree))
+      return dispatch(setTree(tree))
     })
     .catch( err => {
       dispatch(updateStatusBar({status: 'error', message: 'Error loading File Index'}, false))
@@ -178,7 +176,7 @@ export function createFileInServer(path, content) {
     })
     .then( data => {
       return dispatch(getTree()).then( response =>{
-        return dispatch(updateFile(path, {status: 'created',  message: path + ' created', content: content}, true))
+        return dispatch(updateFile(path, {status: 'created',  message: path + ' created', content: content, loaded: true}, true))
       })
     })
     .catch( err => {

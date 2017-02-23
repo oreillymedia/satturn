@@ -29,8 +29,17 @@ oriole: {
       ]},
     {path: "atlas-settings", name: "Atlas Settings", editor: "json", 
       resources: [
-        {type: 'url', path:'atlas.json'}
-      ]},
+        {
+          type: 'url', 
+          path:'atlas.json'
+      }
+      ],
+      settings: {
+          form: true,
+          fields: { password: {type: 'password'} }
+      },
+
+    },
   ], 
 },
 atlas : {
@@ -39,7 +48,50 @@ atlas : {
   configPath: "atlas-settings",
   defaultPath: "atlas-settings",
   defaultConfig: {
-
+      "title": "title",
+      "files": [
+        "main.html"
+      ],
+      "formats": {
+        "pdf": {
+          "version": "web",
+          "color_count": false,
+          "index": false,
+          "toc": false,
+          "syntaxhighlighting": false,
+          "show_comments": false,
+          "trim_size": false
+        },
+        "epub": {
+          "index": false,
+          "toc": false,
+          "epubcheck": false,
+          "syntaxhighlighting": false,
+          "show_comments": false,
+          "downsample_images": false
+        },
+        "mobi": {
+          "index": false,
+          "toc": false,
+          "syntaxhighlighting": false,
+          "show_comments": false,
+          "downsample_images": false
+        },
+        "html": {
+          "index": false,
+          "toc": false,
+          "syntaxhighlighting": false,
+          "show_comments": false,
+          "consolidated": false
+        }
+      },
+      "theme": "oreillymedia/atlas_tech1c_theme",
+      "print_isbn13": "",
+      "lang": "en",
+      "accent_color": "",
+      "templating": true,
+      "branch": "master",
+      
   },
   message: "<p>Click on Atlas Settings on the left to edit atlas.json.</p><p>All changes will be saved automatically.</p>",
   index:[

@@ -29,7 +29,6 @@ export default class AnnotatorEditor extends React.Component {
   render() {
     return (
       <div className="st-cue-annotator"> 
-        {this.isVideoIdValid(this.props.videoId) ? null : <div className="banner"> Youtube Video Id doesn't seem to be valid. Please update in <a href="/#/oriole-settings">oriole settings</a> </div>}
         { <Annotator 
             content={ this.props.content }
             videoId={ this.props.videoId }

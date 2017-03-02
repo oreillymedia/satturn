@@ -67,8 +67,14 @@
   input[type="checkbox"] + label:before {
     font-size: 11px;
   }
+  .cue-index .cue-index-header {
+    top: -40px;
+  }
   .cue-index .cue-marker {
     font-size: 15px;
+  }
+  button.toggle.toggle-small {
+    font-size: 11px;
   }
 
   article.content {

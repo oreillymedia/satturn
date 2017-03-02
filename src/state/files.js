@@ -1,7 +1,7 @@
 /*********************************************************************
 ||  Import required modules
 *********************************************************************/
-import  {fromJS, Map, findKey, keyOf, Seq} from 'immutable'
+import  {Iterable, fromJS, Map, findKey, keyOf, Seq} from 'immutable'
 import throttle from 'lodash.throttle'
 import TreeUtils from 'immutable-treeutils';
 
@@ -9,6 +9,7 @@ import History from '../history'
 import {updateStatusBar, updateConfig} from './nav'
 
 export const treeUtils = new TreeUtils(Seq.of('tree'), 'id', 'children');
+export const treeWalker = new TreeUtils(Seq(), 'id', 'children') // when iterating inside the tree
 export const API_HOST = process.env.API_HOST || window.location.origin + (window.location.pathname + '/api/').replace(/\/{2,}/g, '/')
 
 /*********************************************************************
@@ -25,7 +26,26 @@ export default function(state = INITIAL_STATE, action) {
   
   switch (action.type) {
     case "setTree" :
-      return state.update('tree', tree=> tree.mergeDeep(action.tree)  )
+
+      let newState = state.update('tree', tree=>{
+        let newTree = action.tree
+        // we only want to keep files that still exist,
+        // so we will only iterate through the new tree...
+        for ( let nodePath of treeWalker.nodes(action.tree) ) {
+          // for every node in the tree
+          let path = action.tree.getIn(nodePath.concat('path'))
+          let keyPath = treeWalker.find(tree, node => node.get('path') === path )
+          // if there is a matching path in the old tree
+          if (keyPath) {
+            // update the existing with the new contents and data
+            let existing = tree.getIn(keyPath)
+            newTree = newTree.updateIn(nodePath, (file)=> existing.merge(file) )
+          }
+        }
+        return newTree
+      })      
+      return newState
+
     case "updateFile":
       if (action.keyPath) {
         state = state.updateIn(action.keyPath, (node)=> node.merge(action.data) )  
@@ -48,9 +68,8 @@ export function setTree(tree) {
 
 export function updateFile(path, data, statusExpires = false) {
  return (dispatch, getState) => {
-    let {Files, Nav} = getState();
-    let keyPath = treeUtils.find(Files, node => node.get('path') === path )
-    let timer = (keyPath) ? Files.getIn(keyPath.concat('timer')) : null;
+    let keyPath = treeUtils.find(getState().Files, node => node.get('path') === path )
+    let timer = (keyPath) ? getState().Files.getIn(keyPath.concat('timer')) : null;
     clearTimeout(timer)
     
     if (statusExpires){
@@ -59,17 +78,15 @@ export function updateFile(path, data, statusExpires = false) {
       }, 5000)  
     }
     data.timer = timer;
-    if (path == Nav.get('configFile') && data.content ) {
+    if (path == getState().Nav.get('configFile') && data.content ) {
       dispatch(updateConfig(data.content))
     }
     if (data.content) {
       // here we should be able to trigger a throttled saveFileToServer
     }
     if (data.objectProp){
-      console.log('has objectProp', data.objectProp)
       return dispatch(updatePropInJsonFile(path, keyPath, data))
     } else {
-      console.log('updating', path)
       return dispatch({type: "updateFile", path: path, keyPath: keyPath, data: data})    
     }
     
@@ -81,7 +98,6 @@ export function updatePropInJsonFile(path, keyPath, data) {
     try {
       let fileContent = JSON.parse( getState().Files.getIn(keyPath.concat('content')) )
       fileContent[data.objectProp] = (typeof data.content == 'string') ? JSON.parse(data.content) : data.content;
-      console.log(path, fileContent)
       data.content = JSON.stringify(fileContent, null, 2)
       delete data.objectProp
       return dispatch({type: "updateFile", path: path, keyPath: keyPath, data: data })
@@ -106,10 +122,7 @@ export function getTree() {
       return response.json()
     })
     .then( json => {
-      let tree = fromJS(json);
-      // directories first
-      tree = tree.update('children', (c)=> c.sort((a,b)=> a.get('type').localeCompare(b.get('type'))))
-      return dispatch(setTree(tree))
+      return dispatch(setTree(fromJS(json)))
     })
     .catch( err => {
       dispatch(updateStatusBar({status: 'error', message: 'Error loading File Index'}, false))
@@ -122,11 +135,17 @@ export function getTree() {
 }
 
 export function getFile(path, defaultContent) {
-  if (!defaultContent) {
-    defaultContent = /.json/.test(path) ? "{}" : " "
-  }
-
   return (dispatch, getState) => {
+    if (!defaultContent) {
+      defaultContent = /.json/.test(path) ? "{}" : " "
+    }
+    if (Iterable.isIterable(defaultContent)){
+      defaultContent = JSON.stringify(defaultContent.toJSON());
+    }
+    if (typeof defaultContent == "object"){
+      console.log(defaultContent)
+      defaultContent = JSON.stringify(defaultContent);
+    }
     let keyPath = treeUtils.find(getState().Files, node => node.get('path') === path )
     if (!keyPath){
       return dispatch(createFileInServer(path, defaultContent))
@@ -146,8 +165,7 @@ export function fetchFileFromServer(path) {
       return response.json()
     })
     .then( data => {
-      dispatch(updateFile(path, {content: data.content, status:'loaded', message:'', loaded: true}))
-      console.log( "done fetching %s", path )
+      return dispatch(updateFile(path, {content: data.content, status:'loaded', message:'', loaded: true}))
     })
     .catch( (err) => {
       console.log(err)

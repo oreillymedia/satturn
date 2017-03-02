@@ -129,8 +129,8 @@ export function navigateTo(path) {
       let keyPath = Seq.of('index', key )
       
       Nav.getIn(keyPath.concat('resources')).forEach( res=>{
-        if ( ['url', 'urlInProp'].includes( res.get('type') ) ) {
-          dispatch(getFile(res.get('path')))
+        if ( ['url', 'urlInProp'].includes( res.get('type') ) && res.get('path') != Nav.get('configFile')) {
+          dispatch(getFile(res.get('path'), res.get('defaultContent')))
         }
       })
       dispatch({type: "setCurrentPath", path: newPath, keyPath: keyPath})

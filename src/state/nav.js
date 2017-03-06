@@ -3,44 +3,29 @@
 *********************************************************************/
 import {Seq, fromJS, Map} from 'immutable'
 import createHistory from 'history/createHashHistory' 
-import {getTree, fetchFile, treeUtils} from './files'
-import {store} from '../'
+import {getTree, treeUtils, getFile} from './files'
+import config from '../config'
 
 export const History = createHistory()
 
 /*********************************************************************
 ||  Define the state tree
 *********************************************************************/
-export const INITIAL_STATE = fromJS({
+const defaults = {
   sidebarActiveStatus: true,
-  current: {},
-  configFile: "oriole.json",
-  name: "Oriole Editor",
-  index:[
-    {path: "markdown", name: "Markdown Editor",  editor: "markdown", 
-      resources: [
-        {type:'urlInProp', ref:'source'},
-        {type:'urlInProp', ref:'htmlContent'}
-      ]},
-    {path: "annotator", name: "Cue Annotator",  editor: "ormAnnotator", 
-      resources: [
-        {type:'prop', ref:'cues'},
-        {type:'urlInProp', ref:'htmlContent'}
-      ]},
-    {path: "oriole-settings", name: "Oriole Settings", editor: "json", 
-      resources: [
-        {type: 'url', path: "oriole.json"}
-      ]},
-    {path: "atlas-settings", name: "Atlas Settings", editor: "json", 
-      resources: [
-        {type: 'url', path:'atlas.json'}
-      ]},
-  ], 
+  config: {},
+  current: {},  
   status: {
     status: 'ok',
     message: ''
-  },
-})
+  }
+}
+let appKey = process.env.APP;
+appKey = config.hasOwnProperty(appKey) ? appKey : "oriole"
+// console.log("app is %s", appKey)
+const appConfig = config[appKey]
+
+export const INITIAL_STATE = fromJS(Object.assign(defaults, appConfig))
 
 /*********************************************************************
 ||  The reducer
@@ -48,9 +33,8 @@ export const INITIAL_STATE = fromJS({
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
     case "updateConfig":
-      return state.update('config', (c)=> {
-        return (c) ? c.merge(action.config) : action.config
-      } )
+      state = state.update( 'config', (c)=> c.merge(action.config) )
+      return state
     case "setCurrentPath":
       return state.update('current', (c)=> c.merge({path: action.path, keyPath: action.keyPath}) )
       return state
@@ -75,17 +59,24 @@ export default function(state = INITIAL_STATE, action) {
 export function initialLoad() { 
   return (dispatch, getState) => {
     dispatch(getTree()).then( ()=> {
-      let configFile = getState().Nav.get('configFile') 
-      dispatch(fetchFile(configFile)).then( ()=>{
-        dispatch(updateConfig())
-        dispatch(updateIndex())
-        dispatch(watchHistoryChanges())
-      })
+        dispatch(loadConfig()).then( (a)=>{
+          dispatch(updateIndex())
+          dispatch(watchHistoryChanges())  
+        })
+        
     })
   }
 }
 
-export function updateConfig(){
+export function loadConfig(){
+  return (dispatch, getState) => {
+    let path = getState().Nav.get('configFile')
+    let template = getState().Nav.get('defaultConfig').toJS() || {}
+    return dispatch(getFile(path, JSON.stringify(template)))
+  }
+}
+
+export function updateConfig(content){
   return (dispatch, getState) => {
     let configFile = getState().Nav.get('configFile') 
     let keyPath = treeUtils.find(getState().Files, node => node.get('path') === configFile )
@@ -93,12 +84,11 @@ export function updateConfig(){
       dispatch(updateStatusBar({message: "File '"+configFile+"' not found!"}, false))
       throw new Error('Config File Missing. No file matching ' + configFile) 
     }
-    let data = getState().Files.getIn(keyPath.concat('data'))
-    if (data) {
-      let config = fromJS(JSON.parse(data));
-      dispatch({type: "updateConfig", config: config})  
-    }
-    
+    // let content = getState().Files.getIn(keyPath.concat('content'))
+    if (content) {
+      let config = fromJS(JSON.parse(content));
+      return dispatch({type: "updateConfig", config: config})  
+    } 
   }
 }
 
@@ -115,7 +105,6 @@ export function updateIndex(){
               return res.set('path', getState().Nav.get('configFile'))
           }
           return res
-          
         })
       })
     })
@@ -130,7 +119,6 @@ export function navigateTo(path) {
     let currentPath = normalizedPath(History.location.pathname)
     let newPath = normalizedPath(path)
     if (currentPath != newPath){
-      document.title = Nav.get('name') + " - " + newPath
       History.push("/"+newPath)
     }
 
@@ -141,8 +129,8 @@ export function navigateTo(path) {
       let keyPath = Seq.of('index', key )
       
       Nav.getIn(keyPath.concat('resources')).forEach( res=>{
-        if ( ['url', 'urlInProp'].includes( res.get('type') ) ) {
-          dispatch(fetchFile(res.get('path')))
+        if ( ['url', 'urlInProp'].includes( res.get('type') ) && res.get('path') != Nav.get('configFile')) {
+          dispatch(getFile(res.get('path'), res.get('defaultContent')))
         }
       })
       dispatch({type: "setCurrentPath", path: newPath, keyPath: keyPath})
@@ -155,14 +143,19 @@ export function navigateTo(path) {
 
 export function watchHistoryChanges() {
   return (dispatch, getState) => {
+    let {Nav} = getState();
+      
     // First let's load the current path
     let pathname = normalizedPath(History.location.pathname)
     document.title = Nav.get('name')
     if (pathname.length){
       dispatch(navigateTo(pathname))  
+    } else if (Nav.get('defaultPath')) {
+      dispatch(navigateTo(Nav.get('defaultPath')))  
     }
     History.listen((location, action) => {
       let pathname = normalizedPath(location.pathname)
+      document.title = Nav.get('name') + " - " + pathname
       return dispatch(navigateTo(pathname))
     })    
   }
@@ -187,6 +180,8 @@ export function updateStatusBar(status, expires = true){
   }
 }
 
+
+// HELPERS
 
 export function normalizedPath(path){
   if (/^\//.test(path)) {

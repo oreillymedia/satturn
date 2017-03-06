@@ -50,7 +50,7 @@ $orm-cm-bracket   : #282827;
   .CodeMirror-gutter-wrapper { }
   .CodeMirror-linenumber {color: $dark-gray;  padding-top: rem(3); padding-right: rem(3); font-size: rem(12);}
   .CodeMirror-cursor {border-left: 1px solid $black !important;}
-
+  .CodeMirror-scroll {min-height: 400px;}
   
   span.cm-property, span.cm-attribute {color: $black;}
   span.cm-keyword {color: $orm-cm-keyword;}

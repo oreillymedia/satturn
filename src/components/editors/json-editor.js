@@ -12,7 +12,10 @@ export default class JsonEditor extends React.Component {
         <p>Press enter to save changes to a field.</p>      
         <Json 
           value={JSON.parse(this.props.content)} 
-          onChange={ (v)=> this.onChange(v)}/>
+          onChange={ (v)=> this.onChange(v)}
+          settings={this.props.settings}
+          />
+          
       </div>
     );
   }

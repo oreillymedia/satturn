@@ -5,5 +5,5 @@ npm-debug.log*
 
 gin-bin
 backend/bindata_assetfs.go
-backend/server*
-
+bin/*
+test-data/empty/*

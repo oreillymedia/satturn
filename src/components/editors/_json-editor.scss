@@ -24,11 +24,26 @@
     display: inline-block;
     input {
       border: none;
+      border-bottom: 1px solid #ccc;
+      background-color: transparent;
       font-size: inherit;
       font-family: inherit;
       outline: none;
       padding: 0;
       margin: 0;
     }
+  }
+  .arrayField, .objectField {
+    > .jsonName {
+      display: block;
+    }
+    > .jsonValue {
+      margin-left: 5rem;
+
+    }
+  }
+  .jsonArray > .jsonChildren > .jsonField >.jsonName {
+    width: 3rem;
+    min-width: 3rem;
   }
 }

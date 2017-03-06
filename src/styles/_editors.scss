@@ -39,6 +39,14 @@
 }
 
 .st-cue-annotator {
+  .banner {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    max-width: 60%;
+    border: 1px solid $color-border;
+    padding: 3px 10px;
+  }
   .top-bar {
     top: 110px; 
     padding-top: .5rem;
@@ -59,8 +67,14 @@
   input[type="checkbox"] + label:before {
     font-size: 11px;
   }
+  .cue-index .cue-index-header {
+    top: -40px;
+  }
   .cue-index .cue-marker {
     font-size: 15px;
+  }
+  button.toggle.toggle-small {
+    font-size: 11px;
   }
 
   article.content {

@@ -13,8 +13,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-var root string = GetAppDir() + "/test-data/files/"
-var approot string = GetAppDir()
+var root string = GetAppDir()
 
 type Item struct {
 	Parent   string  `json:"parent,omitempty"`
@@ -39,10 +38,7 @@ func main() {
 	if newRoot != "" {
 		root = newRoot
 	}
-	newApproot := os.Getenv("APPROOT")
-	if newApproot != "" {
-		approot = newApproot
-	}
+
 	r := mux.NewRouter()
 	r.HandleFunc("/api/{path:.*}", ReadPath).Methods("GET")
 	r.HandleFunc("/api/{path:.*}", WritePathToFile).Methods("POST")
@@ -76,6 +72,7 @@ func PathToItem(readPath string, level int) *Item {
 		level += 1
 		item.Type = "directory"
 		stats, _ := ioutil.ReadDir(readPath)
+
 		for _, s := range stats {
 			childItem := PathToItem(path.Join(readPath, s.Name()), level)
 			childItem.Parent = item.Name
@@ -105,19 +102,21 @@ func WritePathToFile(w http.ResponseWriter, req *http.Request) {
 	}
 	vars := mux.Vars(req)
 	filePath := path.Join(root, vars["path"])
+	fileMode := os.FileMode(0644)
 	content := req.FormValue("content")
 	stat, err := os.Stat(filePath)
-	if err != nil {
-		res.Status = "file not found"
-		res.StatusCode = 404
-		fmt.Println("ERROR!", err)
+	if os.IsNotExist(err) {
+		res.Status = "file created"
+		res.StatusCode = 201
+	} else {
+		fileMode = stat.Mode()
 	}
 	if content == "" {
 		res.Status = "not ok"
 		res.StatusCode = 400
 		fmt.Println("ERROR!", "content is empty")
 	} else {
-		ioutil.WriteFile(filePath, []byte(content), stat.Mode())
+		ioutil.WriteFile(filePath, []byte(content), fileMode)
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.WriteHeader(res.StatusCode)
 	}
@@ -126,11 +125,11 @@ func WritePathToFile(w http.ResponseWriter, req *http.Request) {
 }
 
 func GetAppDir() string {
-	d, e := filepath.Abs(filepath.Dir(os.Args[0]))
-	if e != nil {
-		fmt.Println(e)
+	wd, err := os.Getwd()
+	if err != nil {
+		fmt.Println(err)
 	}
-	dir, err := filepath.Abs(d + "/..")
+	dir, err := filepath.Abs(wd)
 	if err != nil {
 		fmt.Println(err)
 	}

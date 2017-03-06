@@ -23,7 +23,9 @@ export default class AnnotatorEditor extends React.Component {
   componentWillUnmount() {
     window.removeEventListener("scroll", this.adjustOffset);
   }
-
+  isVideoIdValid(id){
+    /[a-zA-Z0-9_-]{11}/.test(id)
+  }
   render() {
     return (
       <div className="st-cue-annotator"> 

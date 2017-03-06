@@ -4,7 +4,7 @@ import TreeView from 'react-treeview'
 import classnames from 'classnames'
 import throttle from 'lodash.throttle'
 
-import {updateFile, saveFileToServer, updateInJsonFile, treeUtils} from '../state/files'
+import {updateFile, saveFileToServer, treeUtils} from '../state/files'
 import {setSidebarActiveStatus} from '../state/nav'
 
 import Intro from './intro'
@@ -23,12 +23,12 @@ export default connect((state) => state)( class Editor extends React.Component {
     let {Files, Nav} = this.props
     if ( ['url', 'urlInProp'].includes( res.get('type') ) ) {
       let keyPath = treeUtils.find(Files, node => node.get('path') === res.get('path') )
-      return (keyPath) ? Files.getIn(keyPath.concat('data')) : false
+      return (keyPath) ? Files.getIn(keyPath.concat('content')) : false
     } else if ( res.get('type') == 'prop' ) {
       let configKeyPath = treeUtils.find(Files, node => node.get('path') === Nav.get('configFile') )
       if (!configKeyPath) return false
       try {
-          let data = Files.getIn(configKeyPath.concat('data'))
+          let data = Files.getIn(configKeyPath.concat('content'))
           let c = JSON.parse(data);
           return JSON.stringify(c[res.get('ref')])
       } catch(e) {
@@ -52,21 +52,24 @@ export default connect((state) => state)( class Editor extends React.Component {
       return this.props.dispatch(saveFileToServer(path))
     }, 1000, {leading: false, trailing: true})
   }
-
-  onChange(path, data, objectProp = false) {
+  shouldComponentUpdate(nextProps, nextState){
+    return true;
+    let resources = this.props.feature.get('resources')
+    let shouldUpdate = false;
+    let loaded = resources.forEach( res=> {
+      return res.has('path') ? this.didFileLoad(res.get('path')) : false
+    })
+  }
+  onChange(path, content, objectProp = false) {
     this.props.dispatch(setSidebarActiveStatus(false))
-
-    if (objectProp) {
-      this.props.dispatch(updateInJsonFile(path, data, objectProp))
-    } else {
-      this.props.dispatch(updateFile(path, {data: data}))  
-    }
+    console.log('changed:', path, content, objectProp)
+    this.props.dispatch(updateFile(path, {content: content, objectProp: objectProp}))  
     this.throttledSave(path)
 
     // this is a bit hacky but works for now. on markdown editor we will also save the generated html file
     if (this.props.feature.get('editor') === 'markdown' ){
       let htmlContent = this.props.feature.get('resources').find( (r)=>r.get('ref') == 'htmlContent' )
-      this.props.dispatch(updateFile(htmlContent.get('path'), {data: md.render(data)}))
+      this.props.dispatch(updateFile(htmlContent.get('path'), {content: md.render(content)}))
 
       this.throttledSave2(htmlContent.get('path'))
     }
@@ -75,13 +78,17 @@ export default connect((state) => state)( class Editor extends React.Component {
     let resources = this.props.feature.get('resources')
     let loaded = resources.every( res=> res.has('path') ? this.didFileLoad(res.get('path')) : true );
     let editorSelector = ()=> {
+        
         switch(this.props.feature.get('editor')){
           case "json":
-            if (resources.count() < 1 ) return (<div> No content for this path </div>)
+            if (resources.count() < 1 ) {
+              return (<div> No content for this path </div> )
+            }
             return (<JsonEditor 
                       key={this.props.feature.get('path')} 
                       content={this.getResourceData(resources.first())}
-                      onChange={ (data)=> this.onChange(resources.first().get('path'), data)}
+                      onChange={ (content)=> this.onChange(resources.first().get('path'), content)}
+                      settings={this.props.feature.get('settings') ? this.props.feature.get('settings').toJS() : {} } 
                       />)
           case "markdown":
             if (this.props.Nav.getIn(['config', 'mode'] ) !== "markdown"  ) {
@@ -93,8 +100,8 @@ export default connect((state) => state)( class Editor extends React.Component {
             return (<MdEditor 
                       key={this.props.feature.get('path')} 
                       content={this.getResourceData(resources.first())}
-                      onChange={ (data)=> 
-                        this.onChange(resources.first().get('path'), data)
+                      onChange={ (content)=> 
+                        this.onChange(resources.first().get('path'), content)
                       }
                       />)
           case "ormAnnotator":
@@ -107,7 +114,7 @@ export default connect((state) => state)( class Editor extends React.Component {
               content={ (this.getResourceData(cues)) }
               videoId={this.props.Nav.getIn(['config', 'videoId'])}
               htmlContent={this.getResourceData(html)}
-              onChange={ (data)=> this.onChange(cues.get('path'), data, cues.get('ref'))}
+              onChange={ (content)=> this.onChange(cues.get('path'), content, cues.get('ref'))}
               />)
 
 
@@ -115,7 +122,7 @@ export default connect((state) => state)( class Editor extends React.Component {
 
 
           default:
-            return <div>Loading...</div>
+          return <div>No editor for this path...</div>
         }
         return <Intro/>
         
